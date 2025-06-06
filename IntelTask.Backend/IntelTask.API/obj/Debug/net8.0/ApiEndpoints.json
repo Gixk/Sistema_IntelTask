@@ -1,0 +1,81 @@
+[
+  {
+    "ContainingType": "IntelTask.API.Controllers.DemoController",
+    "Method": "GetAll",
+    "RelativePath": "api/Demo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IntelTask.API.Controllers.DemoController",
+    "Method": "Create",
+    "RelativePath": "api/Demo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entidad",
+        "Type": "IntelTask.Domain.Entities.EDemo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IntelTask.API.Controllers.DemoController",
+    "Method": "GetById",
+    "RelativePath": "api/Demo/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IntelTask.API.Controllers.DemoController",
+    "Method": "Update",
+    "RelativePath": "api/Demo/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "entidad",
+        "Type": "IntelTask.Domain.Entities.EDemo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IntelTask.API.Controllers.DemoController",
+    "Method": "Delete",
+    "RelativePath": "api/Demo/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<IntelTask.Domain.Entities.EDemo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TC_Descripcion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TC_Descripcion)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TN_Codigo">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TN_Codigo">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TN_Codigo">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,8 @@
+appsettings.Development.json
+.vs/
+*.vspscc
+*.vssscc
+*.user
+*.userosscache
+*.suo
+*.sln.docstates

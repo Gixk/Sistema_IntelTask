@@ -1,0 +1,112 @@
+<div class="welcome-header" tuiTitle size="l" style="text-align: center; ">
+    <tui-icon icon="@tui.columns-3-cog" class="icon" size="xl"></tui-icon>
+    <h1>Sistema Gestor de Tareas y Permisos de Teletrabajo</h1>
+</div>
+
+
+
+<div class="cont">
+    <div class="panel panel-usuario">
+        <div
+            style="height: 50px; width: 100%; display: inline-flex; align-items: center; justify-content: space-between;">
+            <h3>Bienvenida/o, {{ usuario.nombreUsuario }}</h3>
+            <!-- <button tuiButton appearance="flat" type="button" size="s" iconStart="@tui.pen" [tuiHint]="tooltip">
+            </button>
+
+            <ng-template #tooltip>Actualizar correo electrónico</ng-template>
+ -->
+        </div>
+
+        <hr class="linea-divisoria" />
+
+        <div class="container-userInfo">
+            <div tuiAppearance="floating" tuiCardLarge tuiCell class="user-card">
+                <div class="icon-wrapper">
+                    <tui-avatar appearance="warning" src="@tui.at-sign" size="s" />
+                </div>
+                <div tuiTitle>
+                    <strong>{{ usuario.correo }}</strong>
+                    <div tuiSubtitle>Correo electrónico</div>
+                </div>
+            </div>
+
+
+            <div tuiAppearance="floating" tuiCardLarge tuiCell class="user-card">
+                <div class="icon-wrapper">
+                    <tui-avatar appearance="warning" src="@tui.contact-round" size="s" />
+                </div>
+                <div tuiTitle>
+                    <strong>{{ usuario.estadoUsuario }}</strong>
+                    <div tuiSubtitle>Estado cuenta</div>
+                </div>
+            </div>
+
+
+            <div tuiAppearance="floating" tuiCardLarge tuiCell class="user-card">
+                <div class="icon-wrapper">
+                    <tui-avatar appearance="warning" src="@tui.baby" size="s" />
+                </div>
+                <div tuiTitle>
+                    <strong>{{ usuario.fechaNac | date:'dd/MM/yyyy'}}</strong>
+                    <div tuiSubtitle>Nacimiento</div>
+                </div>
+            </div>
+
+
+            <div tuiAppearance="floating" tuiCardLarge tuiCell class="user-card">
+                <div class="icon-wrapper">
+                    <tui-avatar appearance="warning" src="@tui.baby" size="s" />
+                </div>
+                <div tuiTitle>
+                    <strong>{{ usuario.fechaCreacion | date:'dd/MM/yyyy'}}</strong>
+                    <div tuiSubtitle>Fecha registro</div>
+                </div>
+            </div>
+
+
+                        <div tuiAppearance="floating" tuiCardLarge tuiCell class="user-card">
+                <div class="icon-wrapper">
+                    <tui-avatar appearance="warning" src="@tui.briefcase" size="s" />
+                </div>
+                <div tuiTitle>
+                    <strong>{{ usuario.rolUsuario }}</strong>
+                    <div tuiSubtitle>Puesto</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    
+    <div class="panel panel-calendario">
+        <h3>Recordatorios</h3>
+        <tui-calendar></tui-calendar>
+    </div>
+</div>
+
+
+
+<!-- Tabla de notificaciones -->
+<div class="tabla-notificaciones">
+    <h3>Notificaciones</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Mensaje</th>
+                <th>Correo Origen</th>
+                <th>Fecha Envío</th>
+                <th>Recordatorio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let noti of notificaciones">
+                <td>{{ noti.titulo }}</td>
+                <td>{{ noti.mensaje }}</td>
+                <td>{{ noti.correoOrigen }}</td>
+                <td>{{ noti.fechaEnvio | date:'dd/MM/yyyy' }}</td>
+                <td>{{ noti.recordatorio }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

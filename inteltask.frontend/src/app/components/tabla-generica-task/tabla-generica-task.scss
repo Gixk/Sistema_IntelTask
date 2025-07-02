@@ -1,0 +1,158 @@
+@import '@taiga-ui/core/styles/taiga-ui-local';
+
+.tabla-secundaria-wrapper {
+    padding: 1rem;
+    margin-top: 2%;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    h2 {
+        color: #2a4c75;
+    }
+}
+
+
+.tabla-secundaria-filtros {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: end;
+
+    label {
+        margin-bottom: 5px;
+        color: #aaa;
+    }
+}
+
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+
+
+.tabla-secundaria-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+            background-color: #2a4c75;
+            color: #fff;
+
+            th {
+                text-align: left;
+                padding: 0.75rem;
+                font-size: 0.875rem;
+                font-weight: bold;
+            }
+        }
+
+        tbody {
+            tr {
+                border-bottom: 1px solid #e0e0e0;
+
+                td {
+                    padding: 0.75rem;
+                    vertical-align: top;
+                    font-size: 0.875rem;
+                }
+
+                &:hover {
+                    background-color: #eaf5ff;
+                }
+            }
+        }
+
+    }
+}
+
+/* CONTENIDO DE LAS CELDAS */
+.title {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.num-gis {
+    font-size: 0.8em;
+    color: #FF5733;
+    background: rgba(255, 87, 51, 0.1);
+    padding: 2px 5px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.creator {
+    font-size: 0.75em;
+    color: #aaa;
+}
+
+
+/* BOTONES DE ACCIONES */
+.acciones-btn {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    button[tuiButton] {
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 0.25rem 0.5rem;
+
+        &:nth-child(1) {
+            --tui-primary: #6D8BBA;
+            border-color: var(--tui-primary) !important;
+            color: var(--tui-primary) !important;
+
+        }
+
+        &:nth-child(2) {
+            --tui-primary: #7aa97b;
+            border-color: var(--tui-primary) !important;
+            color: var(--tui-primary) !important;
+
+        }
+
+        &:nth-child(3) {
+            --tui-primary: #c17d7d;
+            border-color: var(--tui-primary) !important;
+            color: var(--tui-primary) !important;
+
+        }
+    }
+}
+
+/* PAGINADOR */
+.paginator-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+
+}

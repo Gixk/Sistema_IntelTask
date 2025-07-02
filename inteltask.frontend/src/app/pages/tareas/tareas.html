@@ -1,0 +1,210 @@
+<div class="actions">
+  <div>
+    <h1 class="section-title">Gestión de tareas</h1>
+    <span>Esta sección le permite gestionar y controlar las tareas bajo su supervisión</span>
+  </div>
+
+  <div class="header-actions">
+    <button class="custom-button" appearance="secondary" iconStart="@tui.clipboard-plus" tuiButton tuiButtonVertical
+      type="button" (click)="nuevaTarea()">
+      Nueva tarea
+    </button>
+
+    <button class="custom-button" appearance="secondary" iconStart="@tui.book-plus" tuiButton tuiButtonVertical
+      type="button" (click)="generarReporte()">
+      Generar reporte
+    </button>
+  </div>
+</div>
+
+<hr class="linea-divisoria" />
+
+<div class="grid-tablas">
+
+  <div class="tabla-asignada">
+
+    <div class="header">
+      <h2>Tareas Asignadas</h2>
+
+      <div class="header-actions">
+
+        <div class="filter-group">
+          <label>Título</label>
+          <input tuiInput type="text" [(ngModel)]="filters.titulo" (ngModelChange)="applyFilters()" />
+        </div>
+
+        <div class="filter-group">
+          <label>Asignado</label>
+          <input tuiInput type="text" [(ngModel)]="filters.asignado" (ngModelChange)="applyFilters()" />
+        </div>
+
+
+        <div class="filter-group">
+          <label>Estado</label>
+          <select tuiSelect [(ngModel)]="filters.estado" (ngModelChange)="applyFilters()">
+            <option *ngFor="let estado of estados" [ngValue]="estado.value">{{ estado.label }}</option>
+          </select>
+        </div>
+
+        <button tuiButton size="s" appearance="secondary" (click)="clearFilters()">Limpiar</button>
+
+        <button tuiButton appearance="secondary" size="s" (click)="toggleSortOrder()">
+          Ordenar por Fecha {{ sortDirection === 'asc' ? '+' : '-' }}
+        </button>
+      </div>
+
+    </div>
+
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Asignado</th>
+            <th>Estado</th>
+            <th>Fecha límite</th>
+            <th>Prioridad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody id="cuerpoT">
+          <tr *ngFor="let tarea of filteredTasks">
+            <td>
+              <div class="title">{{ tarea.titulo }}</div>
+              <div class="description">{{ tarea.Descripcion }}</div>
+              <div class="num-gis">{{ tarea.numGis }}</div>
+            </td>
+            <td>
+              <div>{{ tarea.nombreAsignado }}</div>
+              <div class="creator">Encargado: {{ tarea.creador }}</div>
+            </td>
+            <td class="hover-cell">
+              <span [class]="'status-' + tarea.estado">{{ getEstadoTexto(tarea.estado) }}</span>
+            </td>
+            <td>
+              <div>{{ tarea.fechaLimite | date: 'dd/MM/yyyy' }}</div>
+              <div class="time-left" [class.warning]="isDateClose(tarea.fechaLimite)">
+                {{ getTimeLeft(tarea.fechaLimite) }}
+              </div>
+            </td>
+            <td>
+              <div class="priority" [class]="'priority-' + tarea.prioridad">
+                {{ getPriorityText(tarea.prioridad) }}
+              </div>
+              <div>Complejidad: {{ tarea.complejidad }}/5</div>
+            </td>
+            <td>
+              <div class="acciones-btn">
+                <button tuiButton appearance="flat" type="button" size="s" iconStart="@tui.file-input"
+                  tuiTooltip="Más información" (click)="abrirDrawerDesdeBoton()">
+                </button>
+
+
+                <app-drawer-izq>
+                  <header class="header-drawer">
+                    <div tuiTitle>
+                      <tui-badge [style.background]="'var(--tui-background-accent-2-hover)'" size="xl">
+                        {{ tarea.titulo }}
+                      </tui-badge>
+                      <span tuiSubtitle size="l"><strong>Descripción: </strong> {{ tarea.Descripcion }}</span>
+                    </div>
+                  </header>
+                  <div>
+                    
+                    <section style="margin-top: 1rem;">
+                      <strong>Asignado a:</strong> {{ tarea.nombreAsignado }} (ID: {{ tarea.idAsignado }})<br />
+                      <strong>Creado por:</strong> {{ tarea.creador }}
+                    </section>
+                    
+                    <section style="margin-top: 1rem;">
+                      <tui-notification status="info">
+                        <p><strong>ID Tarea:</strong> {{ tarea.idTarea }}</p>
+                        <p><strong>Origen:</strong> #{{ tarea.idTareaOrigen }}</p>
+                        <p><strong>Motivo de Espera:</strong> {{ tarea.MotivoEspera || 'No especificado' }}</p>
+                      </tui-notification>
+                    </section>
+
+                    <section style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+                      <tui-chip status="success">{{ tarea.estado }}</tui-chip>
+                      <tui-chip>Complejidad: {{ tarea.complejidad }}</tui-chip>
+                      <tui-chip> Prioridad: {{ tarea.prioridad }}</tui-chip>
+                    </section>
+
+                    <!-- DATOS DE FECHAS -->
+                    <section style="margin-top: 1rem;">
+                      <tui-notification status="neutral">
+                        <p><strong>GIS:</strong> {{ tarea.numGis }}</p>
+                        <p><strong>Asignación:</strong> {{ tarea.fechaAsignacion | date:'shortDate' }}</p>
+                        <p><strong>Fecha Límite:</strong> {{ tarea.fechaLimite | date:'shortDate' }}</p>
+                        <p><strong>Finalización:</strong> {{ tarea.fechaFin ? (tarea.fechaFin | date:'shortDate') : 'No
+                          finalizada' }}</p>
+                      </tui-notification>
+                    </section>
+
+                    <!-- DATOS DEL RESPONSABLE -->
+
+                    <!-- ESPACIO PARA IMÁGENES -->
+                    <div style="
+    margin-top: 2rem;
+    height: 300px;
+    background: var(--tui-base-02);
+    border: 1px dashed var(--tui-base-04);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+  ">
+                      <p style="color: var(--tui-text-03)">Arrastrá imágenes o insertalas acá 📸</p>
+                    </div>
+
+
+                  </div>
+                </app-drawer-izq>
+
+
+                <button tuiButton tuiChevron tuiDropdownOpen appearance="flat" type="button" size="s"
+                  iconStart="@tui.ellipsis" [tuiDropdown]="opcionesTask">
+                </button>
+
+                <ng-template #opcionesTask>
+                  <tui-data-list tuiDataListDropdownManager>
+                    <button tuiOption (click)="eliminarTarea()">Finalizar</button>
+                    <button tuiOption (click)="editarTarea()">Enviar recordatorio</button>
+                  </tui-data-list>
+                </ng-template>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="paginator-container">
+        <tui-pagination [index]="index" [length]="length" (indexChange)="goToPage($event)" size="m" />
+      </div>
+    </div>
+
+  </div>
+
+  <!-- &------------------------ -->
+
+
+  <div class="tabla">
+    <app-tabla-generica-task [datos]="task"></app-tabla-generica-task>
+  </div>
+
+
+  <div class="tabla">
+    <app-tabla-tareas-espera [datos]="task"></app-tabla-tareas-espera>
+  </div>
+
+
+  <div class="tabla">
+    <app-tabla-tareas-incumplidas [datos]="task"></app-tabla-tareas-incumplidas>
+  </div>
+
+
+
+</div>

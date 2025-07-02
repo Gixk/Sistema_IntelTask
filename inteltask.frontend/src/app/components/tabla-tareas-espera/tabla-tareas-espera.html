@@ -1,0 +1,80 @@
+<div class="tabla-secundaria-wrapper">
+
+  <div class="header">
+    <h2>Tareas en espera</h2>
+
+    <div class="tabla-secundaria-filtros">
+      <div class="filter-group">
+        <label>Filtrar por título</label>
+        <input tuiInput type="text" [(ngModel)]="filtros.titulo" (ngModelChange)="aplicarFiltros()" />
+      </div>
+
+      <div class="filter-group">
+        <label>Filtrar por GIS</label>
+        <input tuiInput type="text" [(ngModel)]="filtros.gis" (ngModelChange)="aplicarFiltros()" />
+      </div>
+
+      <button tuiButton tuiDropdownOpen appearance="outline" type="button" size="s" [tuiDropdown]="orden"> Fecha
+      </button>
+
+      <ng-template #orden>
+        <tui-data-list tuiDataListDropdownManager>
+          <option tuiOption [value]="'asc'">Más reciente</option>
+          <option tuiOption [value]="'desc'">Más antigua</option>
+        </tui-data-list>
+      </ng-template>
+    </div>
+
+  </div>
+
+  <div class="tabla-secundaria-container">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Motivo de espera</th>
+          <th>Días en espera</th>
+          <th>Fecha límite</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+        <tr *ngFor="let item of datosPaginados">
+          <td>
+            <div class="title">{{ item.titulo }}</div>
+            <div class="responsable">{{ item.nombreAsignado }}</div>
+            <div class="num-gis">{{ item.numGis }}</div>
+          </td>
+          <td>{{ item.Descripcion }}</td>
+          <td>{{ item.MotivoEspera }}</td>
+          <td>7 días</td>
+          <td>{{ item.fechaLimite | date: 'dd/MM/yyyy' }}</td>
+          
+
+          <td>
+            <div class="acciones-btn">
+              <button tuiButton type="button" size="s" iconStart="@tui.eye" tuiHintDirection="bottom-left"
+               tuiHint="Más detalles"
+                appearance="flat"></button>
+              <button tuiButton type="button" size="s" iconStart="@tui.bell" tuiHintDirection="bottom-left"
+               tuiHint="Enviar recordatorio"
+                appearance="flat"></button>
+            </div>
+          </td>
+
+        </tr>
+      </tbody>
+
+    </table>
+
+    <div class="paginator-container">
+      <tui-pagination [index]="index" [length]="length" (indexChange)="cambiarPagina($event)" size="l" />
+    </div>
+
+
+  </div>
+</div>

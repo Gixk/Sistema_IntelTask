@@ -1,0 +1,80 @@
+<div class="tabla-secundaria-wrapper">
+
+  <div class="header">
+    <h2>Tareas incumplidas</h2>
+
+    <div class="tabla-secundaria-filtros">
+      <div class="filter-group">
+        <label>Filtrar por título</label>
+        <input tuiInput type="text" [(ngModel)]="filtros.titulo" (ngModelChange)="aplicarFiltros()" />
+      </div>
+
+      <div class="filter-group">
+        <label>Filtrar por asignado</label>
+        <input tuiInput type="text" [(ngModel)]="filtros.asignado" (ngModelChange)="aplicarFiltros()" />
+      </div>
+
+      <button tuiButton tuiDropdownOpen appearance="outline" type="button" size="s" [tuiDropdown]="orden"> Fecha
+      </button>
+
+      <ng-template #orden>
+        <tui-data-list tuiDataListDropdownManager appearance="secondary">
+          <option tuiOption [value]="'asc'">Más reciente</option>
+          <option tuiOption [value]="'desc'">Más antigua</option>
+        </tui-data-list>
+      </ng-template>
+
+    </div>
+  </div>
+
+
+
+  <div class="tabla-secundaria-container">
+    <table>
+
+      <thead>
+        <tr>
+          <th>Tarea</th>
+          <th>Descripción</th>
+          <th>Asignado</th>
+          <th>Fecha asignación</th>
+          <th>Fecha limite</th>
+          <th>Justificación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+        <tr *ngFor="let item of datosPaginados">
+          <td>
+
+            <div class="title">{{ item.titulo }}</div>
+            <div class="num-gis">{{ item.numGis }}</div>
+          </td>
+          <td>{{ item.Descripcion }}</td>
+          <td>{{ item.nombreAsignado }}</td>
+          <td>{{ item.fechaAsignacion | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ item.fechaLimite | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ item.MotivoEspera }}</td>
+          <td>
+            <div class="acciones-btn">
+              <button tuiButton size="s" iconStart="@tui.eye" tuiHint="Ver detalles completos"
+                appearance="flat"></button>
+              <button tuiButton size="s" iconStart="@tui.user-check" tuiHint="Reasignar tarea"
+                appearance="flat-destructive"></button>
+              <button tuiButton size="s" iconStart="@tui.mail" tuiHint="Contactar usuario asignado"
+                appearance="flat-grayscale"></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+
+    </table>
+
+    <div class="paginator-container">
+      <tui-pagination [index]="index" [length]="length" (indexChange)="cambiarPagina($event)" size="m" />
+    </div>
+  </div>
+</div>

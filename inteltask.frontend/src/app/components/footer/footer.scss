@@ -1,0 +1,35 @@
+.content {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.footer {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 80px;
+  background-color: #2a4c75;
+  color: white;
+  text-align: center;
+  align-content: center;
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .content {
+      padding: 15px;
+  }
+
+  .footer {
+      font-size: 13px;
+      padding: 8px;
+      height: auto;
+  }
+}

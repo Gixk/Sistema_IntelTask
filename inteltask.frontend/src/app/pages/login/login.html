@@ -1,0 +1,33 @@
+<div class="login-wrapper">
+  <div class="login-content">
+    <!-- Panel izquierdo -->
+    <div class="left-panel">
+      <tui-icon icon="@tui.notepad-text" class="icon"></tui-icon>
+      <h1>IntelTasks</h1>
+      <p>Sistema Gestión de Tareas y Permisos</p>
+    </div>
+
+    <!-- Panel derecho -->
+    <div class="right-panel">
+      <img src="assets/images/logoPoderJudicial.png" alt="Poder Judicial" class="logo" />
+      <p class="subtitle">Ingrese los datos que se le solicitan</p>
+
+      <tui-textfield>
+        <label tuiLabel>User</label>
+        <input tuiTextfield [(ngModel)]="value" />
+      </tui-textfield>
+
+      <tui-textfield class="password-field">
+        <label tuiLabel>Contraseña</label>
+        <input tuiTextfield type="password" placeholder="Contraseña" [(ngModel)]="value" />
+        <tui-icon tuiPassword />
+      </tui-textfield>
+
+      <a class="forgot-password" href="#">Nueva contraseña</a>
+
+      <button tuiButton type="button" appearance="primary" class="btn-login" [routerLink]="['header']">
+        Ingresar
+      </button>
+    </div>
+  </div>
+</div>

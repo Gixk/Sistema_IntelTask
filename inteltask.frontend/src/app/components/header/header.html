@@ -1,0 +1,51 @@
+<div class="wrapper">
+
+    <div class="wrapper-left">
+        <div class="titulo">
+            <img src="assets/images/logo-PJ-blanco.png" alt="Logo Poder Judicial" class="logo" />
+            <h1 class="tui-text_h1 title ml-2">IntelTask</h1>
+        </div>
+    </div>  
+
+    <div class="wrapper-center">
+        <tui-tabs [(activeItemIndex)]="activeItemIndex">
+            <button iconStart="@tui.sparkle" tuiTab type="button" [routerLink]="['inicio']">
+                Inicio
+            </button>
+            <button iconStart="@tui.notepad-text" tuiTab type="button" [routerLink]="['tareas']">
+                Tarea
+            </button>
+            <button iconStart="@tui.laptop" tuiTab type="button" [routerLink]="['permisos']">
+                Permiso
+            </button>
+            <button iconStart="@tui.users-round" tuiTab type="button" [routerLink]="['oficinas']">
+                Oficina
+            </button>
+            <button iconStart="@tui.clock-fading" tuiTab type="button" [routerLink]="['notis']">
+                Recordatorio
+            </button>
+        </tui-tabs>
+    </div>
+
+    <div class="wrapper-right">
+        
+        <tui-button tuiButton tuiChevron type="button" tuiDropdownOpen [tuiDropdown]="dropdown">
+            <div id="user" class="user-container">
+                <div class="user-text">
+                    <span class="user-name">Nombre usuario</span>
+                    <span class="user-role">rol de usuario</span>
+                </div>
+                <tui-icon icon="@tui.circle-user-round" size="l" class="user-icon"></tui-icon>
+            </div>
+        </tui-button>
+
+        <ng-template #dropdown>
+            <tui-data-list tuiDataListDropdownManager>
+                <button tuiOption (click)="onProfileClick()">Perfil</button>
+                <button tuiOption (click)="onSettingsClick()">Configuraciones</button>
+                <button tuiOption (click)="onLogoutClick()">Cerrar sesión</button>
+            </tui-data-list>
+        </ng-template>
+    </div>
+    
+</div>

@@ -1,0 +1,146 @@
+.wrapper {
+    background-color: #2a4c75;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+    flex-wrap: wrap;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.logo {
+    height: 70px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.wrapper-center {
+    overflow-y: auto;
+}
+
+tui-tabs button {
+    color: white;
+    padding: 10px 20px;
+}
+
+.vertical-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
+    background-color: #1e3a5f; /* Nuevo color de fondo */
+    border-radius: 20px;
+    padding: 10px 20px; /* Más padding para hacerlo más grande */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer; /* Agregar cursor pointer para indicar interacción */
+}
+
+.user-container:hover {
+    background-color: #16315c; 
+    transform: scale(1.05);
+}
+
+.user-text {
+    display: flex;
+    flex-direction: column;
+    margin-right: 12px;
+    text-align: left;
+}
+
+.user-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.user-role {
+    font-size: 16px;
+}
+
+.user-icon {
+    font-size: 40px;
+    margin-left: 15px;
+}
+
+
+/* Responsivo */
+@media (max-width: 1024px) {
+    .wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wrapper-left {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .wrapper-center {
+        width: 100%;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .wrapper-right {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .titulo {
+        justify-content: center;
+    }
+
+    tui-tabs button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .user-name {
+        font-size: 16px;
+    }
+
+    .user-role {
+        font-size: 14px;
+    }
+
+    .user-icon {
+        font-size: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-name {
+        font-size: 14px;
+    }
+
+    .user-role {
+        font-size: 12px;
+    }
+
+    .user-icon {
+        font-size: 30px;
+    }
+
+    tui-tabs button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}

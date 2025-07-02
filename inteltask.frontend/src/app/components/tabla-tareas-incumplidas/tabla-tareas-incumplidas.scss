@@ -1,0 +1,123 @@
+.tabla-secundaria-wrapper {
+    padding: 1rem;    
+    margin-top: 3%;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    h2 {
+        color: #2a4c75;
+    }
+}
+
+.tabla-secundaria-filtros {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: end;
+
+    label {
+        margin-bottom: 5px;
+        color: #aaa;
+    }
+}
+
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.tabla-secundaria-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+            background-color: #2a4c75;
+            color: #fff;
+
+            th {
+                text-align: left;
+                padding: 0.75rem;
+                font-size: 0.875rem;
+                font-weight: bold;
+
+            }
+        }
+
+        tbody {
+            tr {
+                border-bottom: 1px solid #e0e0e0;
+
+                td {
+                    padding: 0.75rem;
+                    vertical-align: top;
+                    font-size: 0.875rem;
+                }
+
+                &:hover {
+                    background-color: #fff8e1;
+                }
+            }
+        }
+    }
+}
+
+
+/* CELDAS TAREAS */
+.title {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+
+.num-gis {
+    font-size: 0.8em;
+    color: #FF5733;
+    background: rgba(255, 87, 51, 0.1);
+    padding: 2px 5px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.acciones-btn {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+        border-radius: 8px;
+    }
+}
+
+.paginator-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+
+}

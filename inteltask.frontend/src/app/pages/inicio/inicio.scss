@@ -1,0 +1,170 @@
+
+.welcome-header {
+  width: 100%;
+  color: #2a4c75;
+}
+
+.icon {
+  font-size: 50px;
+}
+
+
+.cont {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  width: 100%;
+  margin: 2rem auto;
+  box-sizing: border-box;
+}
+
+.panel {
+  padding: 1.5rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.panel-usuario {
+  flex: 2;
+  min-width: 300px;
+  max-width: 900px;
+  border: 1px solid #e2eaf3;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.panel-calendario {
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* TABLA USUARIO */
+.linea-divisoria {
+  border: none;
+  border-top: 2px solid #ccc;
+}
+
+
+.container-userInfo {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  width: 320px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+.tabla-notificaciones {
+  margin: 3rem auto;
+  padding: 1rem;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #cbd5e0;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.tabla-notificaciones h3 {
+  text-align: center;
+  color: #003366;
+  margin-bottom: 1rem;
+}
+
+.tabla-notificaciones table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.tabla-notificaciones th,
+.tabla-notificaciones td {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+  white-space: nowrap;
+}
+
+.tabla-notificaciones th {
+  background-color: #eaf2fb;
+  color: #1c3f65;
+}
+
+.tabla-notificaciones tr:nth-child(even) {
+  background-color: #f0f4f8;
+}
+
+
+
+
+@media (max-width: 768px) {
+  .contenedor-principal {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .cont {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .panel {
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  .panel-usuario {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .user-card {
+    width: 220px;
+  }
+
+  .panel-calendario {
+    justify-content: center;
+  }
+
+  .tabla-notificaciones {
+    padding: 1rem;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .tabla-notificaciones table {
+    min-width: 100%;
+  }
+
+  button[tuiButton] {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .icon {
+    font-size: 40px;
+  }
+
+  .welcome-title h1 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+}

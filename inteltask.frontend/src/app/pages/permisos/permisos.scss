@@ -1,0 +1,97 @@
+@import '@taiga-ui/core/styles/taiga-ui-local';
+
+.header-drawer {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  font-size: 30px;
+  color: #2a4c75;
+}
+
+.section-subtext {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.custom-button {
+  margin: 10px;
+  border-radius: 10%;
+  border: 0;
+}
+
+
+.linea-divisoria {
+  border: none;
+  border-top: 2px solid #ccc;
+  margin: 2rem 0;
+}
+
+
+
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+.card-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-subtitle {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.card-content {
+  margin-top: 1rem;
+}
+
+.card-item {
+  background: #f0f0f0;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon {
+  font-size: 1.5rem;
+  color: #007acc;
+}
+
+.card-footer {
+  text-align: right;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #007acc;
+  background: white;
+  color: #007acc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #007acc;
+  color: white;
+}

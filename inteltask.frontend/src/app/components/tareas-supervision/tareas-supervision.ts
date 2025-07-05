@@ -1,37 +1,26 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Tarea } from '../../models/tarea';
 import { ServicioTarea } from '../../core/services/servicio-tarea';
 import { CommonModule } from '@angular/common';
+import { Detalles } from '../detalles/detalles';
 import { TuiButton, TuiDataList, TuiDropdown, TuiHint, TuiPopup, TuiTextfield } from '@taiga-ui/core';
+import { TuiDataListDropdownManager, TuiDrawer, TuiPagination } from '@taiga-ui/kit';
 import { FormsModule } from '@angular/forms';
-import { TuiDataListDropdownManager, TuiDrawer, TuiPagination, } from '@taiga-ui/kit';
-import { TablaGenericaTask } from '../../components/tabla-generica-task/tabla-generica-task';
-import { TablaTareasIncumplidas } from '../../components/tabla-tareas-incumplidas/tabla-tareas-incumplidas';
-import { TablaTareasEspera } from "../../components/tabla-tareas-espera/tabla-tareas-espera";
-import { RouterModule } from '@angular/router';
-import { SuperFormTarea } from '../../components/super-form-tarea/super-form-tarea';
-import { Detalles } from '../../components/detalles/detalles';
-import { TareasSupervision } from '../../components/tareas-supervision/tareas-supervision';
-
+import { SuperFormTarea } from '../super-form-tarea/super-form-tarea';
 
 @Component({
-  selector: 'app-tareas',
-  standalone: true,
-  imports: [
-    CommonModule, TuiDropdown, TuiHint, TuiPopup,
-    TuiDataList, TuiDataListDropdownManager, TuiButton, FormsModule,
-    TuiTextfield, TuiPagination, TablaGenericaTask, TablaTareasIncumplidas,
-    TablaTareasEspera, RouterModule, TuiDrawer, SuperFormTarea, Detalles,
-    TareasSupervision, 
+  selector: 'app-tareas-supervision',
+  imports: [CommonModule, FormsModule, TuiDrawer,
+    TuiDropdown, TuiPagination, TuiPopup, TuiTextfield, TuiHint, TuiDataList,
+    TuiDataListDropdownManager, TuiButton,
+    SuperFormTarea, Detalles
   ],
-  templateUrl: './tareas.html',
-  styleUrls: ['./tareas.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ServicioTarea],
+  templateUrl: './tareas-supervision.html',
+  styleUrl: './tareas-supervision.scss'
 })
 
 
-export class Tareas implements OnInit {
+export class TareasSupervision implements OnInit {
   task: Tarea[] = [];
   filteredTasks: Tarea[] = [];
 
@@ -40,7 +29,6 @@ export class Tareas implements OnInit {
   itemsPorPag = 4;
   sortDirection: 'asc' | 'desc' = 'asc';
   openFilters = false;
-  
 
   constructor(private tareaService: ServicioTarea) { }
 
@@ -52,12 +40,12 @@ export class Tareas implements OnInit {
 
   /* drawer */
   drawerOpen = false;
-  modoDrawer: 'crear' | 'editar' | 'detalle' = 'detalle';
+  modoDrawer: 'crear' | 'editar' | 'detalle' = 'crear';
   tareaSeleccionada?: Tarea;
 
-  nuevaTarea(): void {
-    this.modoDrawer = 'crear';
-    this.tareaSeleccionada = undefined;
+  editarTarea(tarea: Tarea): void {
+    this.modoDrawer = 'editar';
+    this.tareaSeleccionada = tarea;
     this.drawerOpen = true;
   }
 
@@ -72,7 +60,16 @@ export class Tareas implements OnInit {
   }
 
 
-    cambiarEstado(num: number) {
+  onTareaGuardada(): void {
+    this.cerrarDrawer(); // cierra el drawer
+    this.ngOnInit(); // actualiza la lista de tareas
+  }
+
+  generarReporte(): void {
+    console.log('Generar reporte');
+  }
+
+  cambiarEstado(num: number) {
     switch (num) {
       case 3:
         break;
@@ -85,10 +82,7 @@ export class Tareas implements OnInit {
     }
   }
 
-  generarReporte(): void {
-    console.log('Generar reporte');
-  }
-
+  dialogConfirm() { }
 
 
 
@@ -133,42 +127,6 @@ export class Tareas implements OnInit {
     this.updateView();
   }
 
-  getTimeLeft(fecha: Date): string {
-    const hoy = new Date();
-    const tiempoFaltante = fecha.getTime() - hoy.getTime();
-    const cantDías = Math.ceil(tiempoFaltante / (1000 * 60 * 60 * 24));
-    if (cantDías < 0) return 'Vencida';
-    if (cantDías === 0) return 'Hoy';
-    if (cantDías === 1) return '1 día';
-    return `${cantDías} días`;
-  }
-
-
-  isDateClose(fecha: Date): boolean {
-    const hoy = new Date();
-    const diffTime = fecha.getTime() - hoy.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 3;
-  }
-
-
-  filters = {
-    titulo: '',
-    asignado: '',
-    estado: null as number | null,
-  };
-
-  getPriorityText(prioridad: number): string {
-    switch (prioridad) {
-      case 1: return 'Muy Alta';
-      case 2: return 'Alta';
-      case 3: return 'Media';
-      case 4: return 'Baja';
-      case 5: return 'Muy baja';
-      default: return 'none';
-    }
-  }
-
   getEstadoTexto(estado: number): string {
     switch (estado) {
       case 1: return 'Registrada';
@@ -183,7 +141,43 @@ export class Tareas implements OnInit {
     }
   }
 
-    estados = [
+  getPriorityText(prioridad: number): string {
+    switch (prioridad) {
+      case 1: return 'Muy Alta';
+      case 2: return 'Alta';
+      case 3: return 'Media';
+      case 4: return 'Baja';
+      case 5: return 'Muy baja';
+      default: return 'none';
+    }
+  }
+
+  getTimeLeft(fecha: Date): string {
+    const hoy = new Date();
+    const tiempoFaltante = fecha.getTime() - hoy.getTime();
+    const cantDías = Math.ceil(tiempoFaltante / (1000 * 60 * 60 * 24));
+    if (cantDías < 0) return 'Vencida';
+    if (cantDías === 0) return 'Hoy';
+    if (cantDías === 1) return '1 día';
+    return `${cantDías} días`;
+  }
+
+  isDateClose(fecha: Date): boolean {
+    const hoy = new Date();
+    const diffTime = fecha.getTime() - hoy.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays <= 3;
+  }
+
+
+
+  filters = {
+    titulo: '',
+    asignado: '',
+    estado: null as number | null,
+  };
+
+  estados = [
     { label: 'Registrada', value: 1 },
     { label: 'Asignada', value: 2 },
     { label: 'En proceso', value: 3 },

@@ -1,0 +1,123 @@
+<div class="tabla-asignada">
+
+    <div class="header">
+        <h2>Tareas Asignadas</h2>
+
+        <div class="header-actions">
+
+            <div class="filter-group">
+                <label>Título</label>
+                <input tuiInput type="text" [(ngModel)]="filters.titulo" (ngModelChange)="applyFilters()" />
+            </div>
+
+            <div class="filter-group">
+                <label>Asignado</label>
+                <input tuiInput type="text" [(ngModel)]="filters.asignado" (ngModelChange)="applyFilters()" />
+            </div>
+
+
+            <div class="filter-group">
+                <label>Estado</label>
+                <select tuiSelect [(ngModel)]="filters.estado" (ngModelChange)="applyFilters()">
+                    <option *ngFor="let estado of estados" [ngValue]="estado.value">{{ estado.label }}</option>
+                </select>
+            </div>
+
+            <button tuiButton size="s" appearance="secondary" (click)="clearFilters()">Limpiar</button>
+
+            <button tuiButton appearance="secondary" size="s" (click)="toggleSortOrder()">
+                Ordenar por Fecha {{ sortDirection === 'asc' ? '+' : '-' }}
+            </button>
+        </div>
+
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Asignado</th>
+                    <th>Estado</th>
+                    <th>Fecha límite</th>
+                    <th>Prioridad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="cuerpoT">
+                <tr *ngFor="let tarea of filteredTasks">
+                    <td>
+                        <div class="title">{{ tarea.titulo }}</div>
+                        <div class="description">{{ tarea.Descripcion }}</div>
+                        <div class="num-gis">{{ tarea.numGis }}</div>
+                    </td>
+                    <td>
+                        <div>{{ tarea.nombreAsignado }}</div>
+                    </td>
+                    <td class="hover-cell">
+                        <span [class]="'status-' + tarea.estado">{{ getEstadoTexto(tarea.estado) }}</span>
+                    </td>
+                    <td>
+                        <div>{{ tarea.fechaLimite | date: 'dd/MM/yyyy' }}</div>
+                        <div class="time-left" [class.warning]="isDateClose(tarea.fechaLimite)">
+                            {{ getTimeLeft(tarea.fechaLimite) }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="priority" [class]="'priority-' + tarea.prioridad">
+                            {{ getPriorityText(tarea.prioridad) }}
+                        </div>
+                        <div>Complejidad: {{ tarea.complejidad }}/5</div>
+                    </td>
+                    <td>
+                        <div class="acciones-btn">
+                            <button tuiButton appearance="flat" type="button" size="s" iconStart="@tui.file-input"
+                                tuiTooltip="Más información" (click)="verDetallesTarea(tarea)">
+                            </button>
+
+                            <button tuiButton tuiChevron tuiDropdownOpen appearance="flat" type="button" size="s"
+                                iconStart="@tui.ellipsis" [tuiDropdown]="opcionesTask">
+                            </button>
+
+                            <ng-template #opcionesTask>
+                                <tui-data-list tuiDataListDropdownManager>
+                                    <button tuiOption (click)="cambiarEstado(7)">Finalizar</button>
+                                    <button tuiOption (click)="dialogConfirm()">Enviar recordatorio</button>
+                                    <button tuiOption (click)="editarTarea(tarea)">Editar</button>
+                                </tui-data-list>
+                            </ng-template>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="paginator-container">
+            <tui-pagination [index]="index" [length]="length" (indexChange)="goToPage($event)" size="m" />
+        </div>
+    </div>
+
+</div>
+
+
+<tui-drawer *tuiPopup="drawerOpen">
+  <header class="header-drawer">
+    <div class="title-row" tuiTitle>
+      <button appearance="icon" iconStart="@tui.x" tuiIconButton type="button" (click)="cerrarDrawer()"></button>
+      <span tuiCaption>
+        {{
+        modoDrawer === 'crear' ? 'Nueva Tarea' :
+        modoDrawer === 'editar' ? 'Editar Tarea' : 'Detalle de Tarea'
+        }}
+      </span>
+    </div>
+  </header>
+
+  <div style="overflow-y: auto; padding: 1rem">
+    <app-super-form-tarea *ngIf="modoDrawer === 'crear' || modoDrawer === 'editar'" [modo]="modoDrawer"
+      [tarea]="tareaSeleccionada" (tareaGuardada)="onTareaGuardada()"></app-super-form-tarea>
+
+    <app-detalles *ngIf="modoDrawer === 'detalle'" [tarea]="tareaSeleccionada"></app-detalles>
+  </div>
+</tui-drawer>

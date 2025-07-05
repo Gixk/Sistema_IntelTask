@@ -1,59 +1,10 @@
-@import '@taiga-ui/core/styles/taiga-ui-local';
-
-.header-drawer {
-  width: 100%;
-}
-
-
-/* ACCIONES INICIALES */
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.section-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  font-size: 30px;
-  color: #2a4c75;
-}
-
-.section-subtext {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.custom-button {
-  margin: 10px;
-  border-radius: 10%;
-  border: 0;
-  color: #FF5733;
-
-  tui-icon {
-    fill: #FF5733;
-  }
-}
-
-.linea-divisoria {
-  border: none;
-  border-top: 2px solid #ccc;
-  margin: 1rem 0;
-}
-
-.grid-tablas {
-  padding: 1rem;
-  margin: 15px;
-}
-
 
 
 /* CONTENEDOR tabla asignadas */
 .tabla-asignada {
   border-top: 3px solid #2a4c75;
   padding: 1rem;
+  margin-top: 5%;
   overflow-x: auto;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -61,16 +12,6 @@
 
 }
 
-.tabla-asignada2 {
-  padding: 1rem;
-  margin-top: 7%;
-  overflow-x: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-top: 3px solid #2a4c75;
-  max-width: 1200px;
-
-}
 
 .header {
   display: flex;
@@ -285,77 +226,3 @@ table {
   }
 
 }
-
-/* RESPONSIVE 
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .filters {
-    flex-direction: column;
-  }
-
-  .actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  table {
-    display: block;
-
-    thead {
-      display: none;
-    }
-
-    tr {
-      display: block;
-      margin-bottom: 15px;
-      border: 1px solid #444;
-      border-radius: 4px;
-    }
-
-    td {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 15px;
-      border-bottom: 1px solid #444;
-
-      &:before {
-        content: attr(data-label);
-        font-weight: bold;
-        margin-right: 10px;
-        color: #FF5733;
-      }
-    }
-
-    td[data-label] {
-      &::before {
-        content: attr(data-label);
-      }
-    }
-  }
-
-  .container {
-    padding: 0 1rem;
-  }
-}
-
-
-
-@media (max-width: 736px) {
-  .layout-dos-tablas {
-    flex-direction: column;
-  }
-
-  .container,
-  app-tabla-secundaria {
-    max-width: 100%;
-    width: 100%;
-  }
-}
-*/

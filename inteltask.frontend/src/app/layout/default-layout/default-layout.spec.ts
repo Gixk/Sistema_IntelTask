@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateUserForm } from './update-user-form';
+import { DefaultLayout } from './default-layout';
 
-describe('UpdateUserForm', () => {
-  let component: UpdateUserForm;
-  let fixture: ComponentFixture<UpdateUserForm>;
+describe('DefaultLayout', () => {
+  let component: DefaultLayout;
+  let fixture: ComponentFixture<DefaultLayout>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UpdateUserForm]
+      imports: [DefaultLayout]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UpdateUserForm);
+    fixture = TestBed.createComponent(DefaultLayout);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,56 +1,103 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { TuiDay } from '@taiga-ui/cdk/date-time';
-import { TuiHandler } from '@taiga-ui/cdk/types';
-import { TUI_DAY_TYPE_HANDLER, TuiButton, TuiCalendar, TuiHint, TuiIcon, TuiTitle } from '@taiga-ui/core';
-import { TuiAvatar } from '@taiga-ui/kit';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { TuiCalendar, TuiHint, TuiIcon } from '@taiga-ui/core';
+import { TuiAvatar, TuiBadge } from '@taiga-ui/kit';
+import { ServicioUsuario } from '../../core/services/servicio-usuario';
+import { Usuario } from '../../models/usuario';
+import { ServicioNotis } from '../../core/services/servicio-notis';
+import { Notificacion } from '../../models/notificacion';
 
-
-	const handler: TuiHandler<TuiDay, string> = (day: TuiDay) => {
-    if (day.day === 10) {
-        return 'holiday';
-    }
- 
-    return day.isWeekend ? 'weekend' : 'weekday';
-};
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, TuiCalendar, TuiIcon, TuiButton, TuiHint, TuiAvatar],
+  imports: [CommonModule, TuiCalendar, TuiIcon, TuiHint, TuiAvatar, TuiBadge, 
+    
+  ],
   templateUrl: './inicio.html',
   styleUrl: './inicio.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [{provide: TUI_DAY_TYPE_HANDLER, useValue: handler}],
 })
 
+export class Inicio implements OnInit {
 
-export class Inicio {
-  usuario = {
-    idUsuario: 1,
-    nombreUsuario: 'Marco Antonio Solis',
-    correo: 'jperez@example.com',
-    fechaNac: new Date(1990, 5, 15),
-    estadoUsuario: "Activo",
-    fechaCreacion: new Date(2023, 0, 10),
-    rolUsuario: 'Profesional 3'
-  };
+  usuario!: Usuario;
+  userInfo: Array<{ etiqueta: string, valor: string, icon: string }> = [];
+  notificaciones: Notificacion[] = [];
 
-  notificaciones = [
-    {
-      titulo: 'Tarea próxima a vencer',
-      mensaje: 'Recuerda que tu tarea "Auditoría interna" vence mañana.',
-      correoOrigen: 'sistema@intel-task.com',
-      fechaEnvio: new Date(2025, 5, 20, 8, 30),
-      recordatorio: 'Fin tarea: Auditoría interna'
-    },
-    {
-      titulo: 'Reunión mensual',
-      mensaje: 'Tendrás reunión con el equipo el 25 de junio a las 2:00 p.m.',
-      correoOrigen: 'equipo@intel-task.com',
-      fechaEnvio: new Date(2025, 5, 18, 10, 15),
-      recordatorio: 'Recordatorio: Reunión equipo'
-    }
-  ];
+  constructor(
+    private usuarioService: ServicioUsuario,
+    private notiService: ServicioNotis
+  ) { }
+
+
+
+  ngOnInit(): void {
+    this.cargarUser();
+    this.cargarNotis();
+  }
+
+
+
+  cargarUser(): void {
+    this.usuarioService.getUsuario().subscribe((usuario: Usuario) => {
+      this.usuario = usuario;
+      this.userInfo = [
+        {
+          etiqueta: 'ID',
+          valor: usuario.idUsuario.toString(),
+          icon: '@tui.at-sign'
+        },
+        {
+          etiqueta: 'Correo electrónico',
+          valor: usuario.correo,
+          icon: '@tui.at-sign'
+        },
+        {
+          etiqueta: 'Nacimiento',
+          valor: new Date(usuario.fechaNac).toLocaleDateString('es-CR'),
+          icon: '@tui.baby'
+        },
+        {
+          etiqueta: 'Fecha registro',
+          valor: new Date(usuario.fechaCreacion).toLocaleDateString('es-CR'),
+          icon: '@tui.baby'
+        },
+        {
+          etiqueta: 'Estado cuenta',
+          valor: usuario.estadoUsuario ? 'Activo' : 'Inactivo',
+          icon: '@tui.contact-round'
+        },
+        {
+          etiqueta: 'Puesto',
+          valor: this.getNombreRol(usuario.rolUsuario),
+          icon: '@tui.briefcase'
+        }
+      ];
+    });
+  }
+
+  cargarNotis(): void {
+    this.notiService.getNotificaciones().subscribe((data) => {
+      this.notificaciones = data;
+    });
+  }
+
+  //& Mapear número de rol a texto
+  getNombreRol(rol: number): string {
+    const roles: { [key: number]: string } = {
+      0: 'Administrador',
+      1: 'Director',
+      2: 'Sub-Director',
+      3: 'Jefe',
+      4: 'Coordinador',
+      5: 'Profesional 3',
+      6: 'Profesional 2',
+      7: 'Profesional 1',
+      8: 'Técnico'
+    };
+    return roles[rol] || 'Desconocido';
+  }
+
 
 }

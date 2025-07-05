@@ -2,8 +2,8 @@
   <div class="login-content">
     <!-- Panel izquierdo -->
     <div class="left-panel">
-      <tui-icon icon="@tui.notepad-text" class="icon"></tui-icon>
-      <h1>IntelTasks</h1>
+      <tui-icon icon="@tui.columns-3-cog" class="icon"></tui-icon>
+      <h1>IntelTask</h1>
       <p>Sistema Gestión de Tareas y Permisos</p>
     </div>
 
@@ -13,19 +13,19 @@
       <p class="subtitle">Ingrese los datos que se le solicitan</p>
 
       <tui-textfield>
-        <label tuiLabel>User</label>
-        <input tuiTextfield [(ngModel)]="value" />
+        <label tuiLabel>Correo electrónico</label>
+        <input placeholder="usuario@gmail.com" tuiTextfield />
       </tui-textfield>
 
-      <tui-textfield class="password-field">
+
+      <tui-textfield class="alineado">
         <label tuiLabel>Contraseña</label>
-        <input tuiTextfield type="password" placeholder="Contraseña" [(ngModel)]="value" />
-        <tui-icon tuiPassword />
+        <input tuiTextfield type="password" placeholder="Ingrese contraseña" />
       </tui-textfield>
 
       <a class="forgot-password" href="#">Nueva contraseña</a>
 
-      <button tuiButton type="button" appearance="primary" class="btn-login" [routerLink]="['header']">
+      <button tuiButton type="button" appearance="primary" class="btn-login" (click)="login2()">
         Ingresar
       </button>
     </div>

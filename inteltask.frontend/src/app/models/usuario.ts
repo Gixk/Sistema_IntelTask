@@ -5,7 +5,7 @@ export interface Usuario {
     fechaNac: Date;
     contra: string;
     estadoUsuario: boolean;
-    fechaCreacion?: Date;
-    fechaModificacion?: Date; // nullable
+    fechaCreacion: Date;
+    fechaModificacion?: Date;
     rolUsuario: number;
 }

@@ -1,0 +1,28 @@
+<form [formGroup]="form" (ngSubmit)="guardarTarea()" class="formulario-tarea">
+  <div class="campos-formulario">
+
+    <tui-input formControlName="titulo" class="campo" placeholder="Título *"></tui-input>
+    <tui-text-area formControlName="Descripcion" class="campo" placeholder="Descripción *"></tui-text-area>
+    <tui-text-area formControlName="MotivoEspera" class="campo" placeholder="Motivo de espera (opcional)"></tui-text-area>
+
+    <tui-input formControlName="numGis" class="campo" placeholder="Número GIS *"></tui-input>
+
+    <tui-input type="number" formControlName="complejidad" class="campo" placeholder="Complejidad (1-5) *"></tui-input>
+    <tui-input type="number" formControlName="estado" class="campo" placeholder="Estado *"></tui-input>
+    <tui-input type="number" formControlName="prioridad" class="campo" placeholder="Prioridad (1-5) *"></tui-input>
+
+    <tui-input type="date" formControlName="fechaAsignacion" class="campo" placeholder="Fecha de asignación *"></tui-input>
+    <tui-input type="date" formControlName="fechaLimite" class="campo" placeholder="Fecha límite *"></tui-input>
+    <tui-input type="date" formControlName="fechaFin" class="campo" placeholder="Fecha fin (opcional)"></tui-input>
+
+    <tui-input type="number" formControlName="creador" class="campo" placeholder="ID Creador *"></tui-input>
+    <tui-input type="number" formControlName="asignado" class="campo" placeholder="ID Asignado *"></tui-input>
+
+  </div>
+
+  <div class="botones-formulario">
+    <button tuiButton appearance="primary" type="submit" [disabled]="form.invalid">
+      Guardar
+    </button>
+  </div>
+</form>

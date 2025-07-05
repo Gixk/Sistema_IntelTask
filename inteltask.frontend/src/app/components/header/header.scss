@@ -11,16 +11,15 @@
 
 .titulo {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-end;
     font-family: 'Times New Roman', Times, serif;
 }
 
 .logo {
-    height: 70px;
+    height: 60px;
     width: auto;
     max-width: 100%;
-    object-fit: contain;
+    margin-right: 7px;
 }
 
 .wrapper-center {
@@ -88,12 +87,16 @@ tui-tabs button {
         width: 100%;
         display: flex;
         justify-content: center;
-        margin-bottom: 15px;
+        padding: 1.5%;
+
+        .logo {
+            height: 50px;
+        }
     }
 
     .wrapper-center {
         width: 100%;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         display: flex;
         justify-content: center;
     }
@@ -102,6 +105,7 @@ tui-tabs button {
         width: 100%;
         display: flex;
         justify-content: flex-end;
+        padding: 1%;
     }
 
     .titulo {

@@ -1,1 +1,55 @@
-<p>permisos works!</p>
+<!-- <tui-textfield *ngIf="auth.tienePermiso([1,2])">
+    <label tuiLabel>Click icon to toggle</label>
+    <input placeholder="I am placeholder" tuiTextfield type="password" />
+    <tui-icon tuiPassword />
+</tui-textfield> -->
+
+<div class="actions">
+    <div>
+        <h1 class="section-title">Gestión de Permisos</h1>
+
+        <span>Esta sección le permite gestionar solitudes de permisos</span>
+        <br>
+        <span>Esta sección le permite controlar y solicitar sus permisos</span>
+
+    </div>
+
+    <div class="header-actions">
+        <button class="custom-button" appearance="secondary" iconStart="@tui.clipboard-plus" tuiButton tuiButtonVertical
+            type="button" (click)="crearPermiso()">
+            Nueva tarea
+        </button>
+
+        <button class="custom-button" appearance="secondary" iconStart="@tui.book-plus" tuiButton tuiButtonVertical
+            type="button" (click)="crearPermiso()">
+            Generar reporte
+        </button>
+    </div>
+</div>
+
+<hr class="linea-divisoria" />
+
+
+
+<div class="card">
+    <header class="card-header">
+        <h1 class="card-title">
+            Title
+            <span class="card-subtitle">Subtitle</span>
+        </h1>
+    </header>
+
+    <section class="card-content">
+        <div class="card-item" *ngFor="let i of [1, 2, 3]">
+            <span class="icon">＋</span>
+            <h2>
+                Title
+                <small>Subtitle</small>
+            </h2>
+        </div>
+    </section>
+
+    <footer class="card-footer">
+        <button type="button">Label</button>
+    </footer>
+</div>

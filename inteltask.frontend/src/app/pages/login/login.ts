@@ -1,32 +1,52 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ServicioLogin } from '../../services/servicio-login';
 import { TuiButton, TuiDataList, TuiIcon, TuiTextfield } from '@taiga-ui/core';
-import { TuiFilterByInputPipe } from '@taiga-ui/kit';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { Auth } from '../../core/AuthService/auth';
 
 @Component({
+  standalone: true,
   selector: 'app-login',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TuiIcon, TuiButton, TuiTextfield,
-    TuiDataList, RouterLink
+  imports: [CommonModule, ReactiveFormsModule, TuiButton, FormsModule, TuiIcon,
+    TuiTextfield, TuiDataList,
   ],
   templateUrl: './login.html',
-  styleUrl: './login.scss'
+  styleUrl: './login.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
+
+
 export class Login {
-   @Input() datos: any[] = [];
 
-  loginForm = new FormGroup({
-    password: new FormControl('', [Validators.required]),
-    confirmPassword: new FormControl('', [Validators.required])
-  });
+  user = '';
+  password = '';
 
+  constructor(private router: Router, private auth: Auth) { }
+
+  login(): void {
+    this.auth.autenticar(this.user, this.password).subscribe({
+      next: (resp: any) => {
+        this.auth.guardarToken(resp.token);
+        this.router.navigate(['/inicio']);
+      },
+      error: () => alert('Credenciales incorrectas')
+    });
+
+  }
+
+  login2(): void {
+    this.router.navigate(['inicio']);
+  }
+
+  cambiarContraseña(): void { }
+
+  /*
+  logout() {
+    this.authService.logout();
+  }
   
-  protected readonly form = new FormGroup({
-    user: new FormControl(''),
-  });
-
-  protected value = '';
+  */
 
 }

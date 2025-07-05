@@ -46,7 +46,7 @@ export class Inicio implements OnInit {
         {
           etiqueta: 'ID',
           valor: usuario.idUsuario.toString(),
-          icon: '@tui.at-sign'
+          icon: '@tui.id-card'
         },
         {
           etiqueta: 'Correo electrónico',
@@ -61,7 +61,7 @@ export class Inicio implements OnInit {
         {
           etiqueta: 'Fecha registro',
           valor: new Date(usuario.fechaCreacion).toLocaleDateString('es-CR'),
-          icon: '@tui.baby'
+          icon: '@tui.folder-input'
         },
         {
           etiqueta: 'Estado cuenta',

@@ -1,28 +1,90 @@
-<form [formGroup]="form" (ngSubmit)="guardarTarea()" class="formulario-tarea">
-  <div class="campos-formulario">
+<div class="container-fluid p-3" style="overflow-y: auto;">
+  <form class="row g-3 needs-validation" [formGroup]="form" novalidate>
 
-    <tui-input formControlName="titulo" class="campo" placeholder="Título *"></tui-input>
-    <tui-text-area formControlName="Descripcion" class="campo" placeholder="Descripción *"></tui-text-area>
-    <tui-text-area formControlName="MotivoEspera" class="campo" placeholder="Motivo de espera (opcional)"></tui-text-area>
+    <div>
+      <h2 tuiTitle>
+        <strong>Formulario para registrar una tarea</strong>
+        <span tuiSubtitle>Complete todos los espacios a continuación</span>
+      </h2>
+    </div>
 
-    <tui-input formControlName="numGis" class="campo" placeholder="Número GIS *"></tui-input>
 
-    <tui-input type="number" formControlName="complejidad" class="campo" placeholder="Complejidad (1-5) *"></tui-input>
-    <tui-input type="number" formControlName="estado" class="campo" placeholder="Estado *"></tui-input>
-    <tui-input type="number" formControlName="prioridad" class="campo" placeholder="Prioridad (1-5) *"></tui-input>
+    <tui-textfield>
+      <label tuiLabel>Numero de GIS</label>
+      <input formControlName="gisValue" tuiTextfield />
+      <tui-icon icon="@tui.badge-info" />
+    </tui-textfield>
+    <tui-error *ngIf="getErrorMessage('gisValue')">
+      {{ getErrorMessage('gisValue') }}
+    </tui-error>
 
-    <tui-input type="date" formControlName="fechaAsignacion" class="campo" placeholder="Fecha de asignación *"></tui-input>
-    <tui-input type="date" formControlName="fechaLimite" class="campo" placeholder="Fecha límite *"></tui-input>
-    <tui-input type="date" formControlName="fechaFin" class="campo" placeholder="Fecha fin (opcional)"></tui-input>
 
-    <tui-input type="number" formControlName="creador" class="campo" placeholder="ID Creador *"></tui-input>
-    <tui-input type="number" formControlName="asignado" class="campo" placeholder="ID Asignado *"></tui-input>
 
-  </div>
+    <tui-textfield>
+      <label tuiLabel>Titulo tarea</label>
+      <input formControlName="tituloValue" tuiTextfield />
+      <tui-icon icon="@tui.badge-info" />
+    </tui-textfield>
+    <tui-error *ngIf="getErrorMessage('tituloValue')">
+      {{ getErrorMessage('tituloValue') }}
+    </tui-error>
 
-  <div class="botones-formulario">
-    <button tuiButton appearance="primary" type="submit" [disabled]="form.invalid">
+
+
+    <tui-textfield iconStart="@tui.pencil">
+      <label tuiLabel>Descripcion tarea</label>
+      <textarea formControlName="desValue" placeholder="Indicaciones..." tuiTextarea [max]="5" [min]="5"></textarea>
+    </tui-textfield>
+
+
+
+    <tui-textfield>
+      <label tuiLabel>Fecha Limite</label>
+      <input formControlName="fechaLimite" tuiInputDate />
+      <tui-calendar *tuiTextfieldDropdown />
+    </tui-textfield>
+
+
+    <tui-textfield iconStart="@tui.pencil">
+      <label tuiLabel>Motivo de Espera</label>
+      <textarea formControlName="motivoEspera" [disabled]="motivoEsperaDeshabilitado" placeholder="Indicaciones..." tuiTextarea [max]="5" [min]="5"></textarea>
+    </tui-textfield>
+
+
+
+    <!-- Complejidad -->
+    <div class="form-group">
+      <label>Complejidad</label>
+      <select class="form-control" formControlName="compleValue">
+        <option [ngValue]="null" disabled selected>Seleccione complejidad</option>
+        <option *ngFor="let level of niveles" [ngValue]="level.value">{{ level.label }}</option>
+      </select>
+    </div>
+
+    <!-- Prioridad -->
+    <div class="form-group">
+      <label>Prioridad</label>
+      <select class="form-control" formControlName="prioValue">
+        <option [ngValue]="null" disabled selected>Seleccione prioridad</option>
+        <option *ngFor="let level of niveles" [ngValue]="level.value">{{ level.label }}</option>
+      </select>
+    </div>
+
+
+
+    <div class="form-group">
+      <label>Asignar a</label>
+      <select tuiChevron class="form-control" formControlName="asignado">
+        <option [ngValue]="null" disabled selected>Seleccione usuario</option>
+        <option *ngFor="let user of lowUsers" [ngValue]="user.idUsuario">
+          {{ user.nombreUsuario }} - {{ roleMap[user.rolUsuario] || 'Rol desconocido' }}
+        </option>
+      </select>
+    </div>
+
+
+    <button size="s" appearance="accent" tuiButton type="button" (click)="guardarTarea()">
       Guardar
     </button>
-  </div>
-</form>
+  </form>
+</div>

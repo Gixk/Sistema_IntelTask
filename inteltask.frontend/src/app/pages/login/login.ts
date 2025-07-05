@@ -8,8 +8,8 @@ import { Auth } from '../../core/AuthService/auth';
 @Component({
   standalone: true,
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, TuiButton, FormsModule, TuiIcon,
-    TuiTextfield, TuiDataList,
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TuiIcon,
+    TuiTextfield, TuiDataList, TuiButton
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -25,20 +25,32 @@ export class Login {
 
   constructor(private router: Router, private auth: Auth) { }
 
+  form = new FormGroup({
+    user: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', Validators.required)
+  });
+
+
   login(): void {
-    this.auth.autenticar(this.user, this.password).subscribe({
+    if (this.form.invalid) return;
+
+    const { user, password } = this.form.value;
+
+    this.auth.autenticar(user!, password!).subscribe({
       next: (resp: any) => {
         this.auth.guardarToken(resp.token);
         this.router.navigate(['/inicio']);
       },
       error: () => alert('Credenciales incorrectas')
     });
-
   }
 
-  login2(): void {
-    this.router.navigate(['inicio']);
+
+  login2(){
+    this.router.navigate(['/inicio']);
   }
+
+
 
   cambiarContraseña(): void { }
 

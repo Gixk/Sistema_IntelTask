@@ -22,7 +22,10 @@ export class Auth {
 
   /* Verifica existencia del usuario */
   autenticar(user: string, password: string) {
-    return this.http.post(`${this.urlAPI}/login`, { user, password });
+    return this.http.post(`${this.urlAPI}/Auth/login`, { 
+      CT_Correo_usuario: user,
+      CT_Contrasenna: password
+     });
   }
 
 

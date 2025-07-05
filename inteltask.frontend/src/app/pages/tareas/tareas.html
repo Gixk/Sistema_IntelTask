@@ -151,34 +151,36 @@
 </div>
 
 
-<tui-drawer *ngIf="drawerOpen">
+<tui-drawer *tuiPopup="drawerOpen" style="background-color: #cee4ff;">
   <header class="header-drawer">
-    <div class="title-row aling-items-center" tuiTitle>
+    <div class="title-row" style="display: flex; align-items: center; gap: 1rem;">
       <button appearance="icon" iconStart="@tui.x" tuiIconButton type="button" (click)="cerrarDrawer()"></button>
-      <span tuiCaption>
+
+      <h4 tuiCaption style="margin: 0">
         {{
-        modoDrawer === 'crear' ? 'NUEVA TAREA' :
-        modoDrawer === 'editar' ? 'EDITAR TAREA' : 'INFORME TAREA'
+        modoDrawer === 'crear'
+        ? 'Nueva Tarea'
+        : modoDrawer === 'editar'
+        ? 'Actualizar Tarea'
+        : 'Informe Tarea'
         }}
-      </span>
+      </h4>
     </div>
   </header>
 
 
-  <div style="overflow-y: auto; padding: 1rem">
+  <div>
+    <ng-container [ngSwitch]="modoDrawer">
+      <app-super-form-tarea *ngSwitchCase="'crear'" [modo]="'crear'" (tareaGuardada)="cerrarDrawer()">
+      </app-super-form-tarea>
 
+      <app-super-form-tarea *ngSwitchCase="'editar'" [modo]="'editar'" [tarea]="tareaSeleccionada"
+        (tareaGuardada)="cerrarDrawer()">
+      </app-super-form-tarea>
 
-      <ng-container [ngSwitch]="modoDrawer">
-        <app-super-form-tarea *ngSwitchCase="'crear'" [modo]="'crear'" (tareaGuardada)="cerrarDrawer()">
-        </app-super-form-tarea>
-
-        <app-super-form-tarea *ngSwitchCase="'editar'" [modo]="'editar'" [tarea]="tareaSeleccionada"
-          (tareaGuardada)="cerrarDrawer()">
-        </app-super-form-tarea>
-
-        <app-detalles *ngSwitchCase="'detalle'" [tarea]="tareaSeleccionada">
-        </app-detalles>
-      </ng-container>
+      <app-detalles *ngSwitchCase="'detalle'" [tarea]="tareaSeleccionada">
+      </app-detalles>
+    </ng-container>
 
   </div>
 </tui-drawer>

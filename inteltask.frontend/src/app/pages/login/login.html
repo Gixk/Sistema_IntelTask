@@ -12,22 +12,26 @@
       <img src="assets/images/logoPoderJudicial.png" alt="Poder Judicial" class="logo" />
       <p class="subtitle">Ingrese los datos que se le solicitan</p>
 
-      <tui-textfield>
-        <label tuiLabel>Correo electrónico</label>
-        <input placeholder="usuario@gmail.com" tuiTextfield />
-      </tui-textfield>
+      <form [formGroup]="form">
+        <tui-textfield>
+          <label tuiLabel>Correo electrónico</label>
+          <input placeholder="usuario@gmail.com" tuiTextfield />
+        </tui-textfield>
 
 
-      <tui-textfield class="alineado">
-        <label tuiLabel>Contraseña</label>
-        <input tuiTextfield type="password" placeholder="Ingrese contraseña" />
-      </tui-textfield>
+        <tui-textfield class="alineado">
+          <label tuiLabel>Contraseña</label>
+          <input tuiTextfield type="password" placeholder="Ingrese contraseña" />
+        </tui-textfield>
 
-      <a class="forgot-password" href="#">Nueva contraseña</a>
+        <button tuiButton size="s" appearance="secondary" class="forgot-password">Nueva contraseña</button>
 
-      <button tuiButton type="button" appearance="primary" class="btn-login" (click)="login2()">
-        Ingresar
-      </button>
+        <button tuiButton type="submit" appearance="primary" class="btn-login" (click)="login2()">
+          Ingresar
+        </button>
+      </form>
+
+
     </div>
   </div>
 </div>

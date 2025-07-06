@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-
+﻿using IntelTask.API.frontDTO;
 using IntelTask.Domain.Entities;
 using IntelTask.Domain.Interface;
 using IntelTask.Domain.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IntelTask.API.Controllers
 {
@@ -29,7 +29,15 @@ namespace IntelTask.API.Controllers
         public async Task<IActionResult> GetAllOffices()
         {
             var oficinas = await _ofiService.ObtenerTodasLasOficinas();
-            return Ok(oficinas);
+
+            var dtoList = oficinas.Select(o => new OficinaDTO
+            {
+                CodigoOficina = o.CN_Codigo_oficina,
+                NombreOficina = o.CT_Nombre_oficina ?? "",
+                CodOficinaEncargada = o.CN_Oficina_encargada
+            }).ToList();
+
+            return Ok(dtoList);
         }
 
 
@@ -38,8 +46,18 @@ namespace IntelTask.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOfficeById(int id)
         {
-            var oficina = await _ofiService.ObtenerOficinaPorId(id);
-            return oficina != null ? Ok(oficina) : NotFound();
+            var o = await _ofiService.ObtenerOficinaPorId(id);
+
+            if (o == null) return NotFound();
+
+            var dto = new OficinaDTO
+            {
+                CodigoOficina = o.CN_Codigo_oficina,
+                NombreOficina = o.CT_Nombre_oficina ?? "",
+                CodOficinaEncargada = o.CN_Oficina_encargada
+            };
+
+            return Ok(dto);
         }
 
 

@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TuiButton, TuiDataList, TuiDropdown, TuiHint, TuiIcon } from '@taiga-ui/core';
 import { TuiChevron, TuiPagination } from '@taiga-ui/kit';
+import { ServicioTarea } from '../../core/services/servicio-tarea';
+import { Tarea } from '../../models/tarea';
 
 @Component({
   selector: 'app-tabla-generica-task',
@@ -14,9 +16,9 @@ import { TuiChevron, TuiPagination } from '@taiga-ui/kit';
   styleUrl: './tabla-generica-task.scss',
 })
 export class TablaGenericaTask implements OnInit {
-  @Input() datos: any[] = [];
-  datosFiltrados: any[] = [];
-  datosPaginados: any[] = [];
+  datosFiltrados: Tarea[] = [];
+  datosPaginados: Tarea[] = [];
+  tareas: Tarea[] = [];
 
   filtros = {
     titulo: '',
@@ -28,27 +30,46 @@ export class TablaGenericaTask implements OnInit {
   length = 0;
   itemsPorPagina = 4;
 
+  constructor(private tareaService: ServicioTarea, private detector: ChangeDetectorRef) { }
+
   ngOnInit(): void {
-    this.aplicarFiltros();
+    this.tareaService.getTareas().subscribe((tareas: Tarea[]) => {
+      this.tareas = tareas.map(t => ({
+        ...t,
+        fechaAsignacion: new Date(t.fechaAsignacion),
+        fechaLimite: new Date(t.fechaLimite),
+        fechaFin: t.fechaFin ? new Date(t.fechaFin) : null
+      }));
+      this.aplicarFiltros();
+      this.detector.detectChanges();
+    });
   }
 
   aplicarFiltros(): void {
     this.index = 0; // Reinicia paginación al aplicar filtros
 
-    this.datosFiltrados = this.datos
+    this.datosFiltrados = this.tareas
       .filter(d =>
         d.titulo.toLowerCase().includes(this.filtros.titulo.toLowerCase()) &&
         d.numGis.toLowerCase().includes(this.filtros.gis.toLowerCase())
       )
       .sort((a, b) => {
-        const dateA = new Date(a.fechaFin).getTime();
-        const dateB = new Date(b.fechaFin).getTime();
-        return this.filtros.orden === 'asc' ? dateB - dateA : dateA - dateB;
+        const dateA = a.fechaFin ? new Date(a.fechaFin).getTime() : 0;
+        const dateB = b.fechaFin ? new Date(b.fechaFin).getTime() : 0;
+        return this.filtros.orden === 'asc' ? dateA - dateB : dateB - dateA;
       });
 
     this.length = Math.ceil(this.datosFiltrados.length / this.itemsPorPagina) || 1;
     this.actualizarPaginados();
   }
+
+  setOrden(valor: 'asc' | 'desc') {
+    this.filtros.orden = valor;
+    this.aplicarFiltros();
+  }
+
+
+
 
   actualizarPaginados(): void {
     const start = this.index * this.itemsPorPagina;
@@ -61,11 +82,13 @@ export class TablaGenericaTask implements OnInit {
     this.actualizarPaginados();
   }
 
-  aprobar(item: any): void {
-    console.log('Aprobar:', item);
+
+
+  aprobar(item: Tarea): void {
+    console.log('Aprobar:', item.idTarea);
   }
 
-  rechazar(item: any): void {
-    console.log('Rechazar:', item);
+  rechazar(item: Tarea): void {
+    console.log('Rechazar:', item.idTarea);
   }
 }

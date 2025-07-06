@@ -21,6 +21,7 @@
 
 <hr class="linea-divisoria" />
 
+
 <div class="grid-tablas">
 
   <div class="tabla-asignada">
@@ -61,7 +62,7 @@
         <thead>
           <tr>
             <th>Título</th>
-            <th>Asignado</th>
+            <th>Responsable</th>
             <th>Estado</th>
             <th>Fecha límite</th>
             <th>Prioridad</th>
@@ -73,13 +74,14 @@
           <tr *ngFor="let tarea of filteredTasks">
             <td>
               <div class="title">{{ tarea.titulo }}</div>
-              <div class="description">{{ tarea.Descripcion }}</div>
+              <div class="description">{{ tarea.descripcion }}</div>
               <div class="num-gis">{{ tarea.numGis }}</div>
             </td>
             <td>
-              <div>{{ tarea.nombreAsignado }}</div>
-              <div class="creator">Encargado: {{ tarea.creador }}</div>
+              <div>{{ tarea.nombreCreador }}</div>
+              <div class="creator">ID encargado: {{ tarea.creador }}</div>
             </td>
+
             <td class="hover-cell">
               <span [class]="'status-' + tarea.estado">{{ getEstadoTexto(tarea.estado) }}</span>
             </td>
@@ -133,25 +135,23 @@
 
 
   <div class="tabla">
-    <app-tabla-generica-task [datos]="task"></app-tabla-generica-task>
+    <app-tabla-generica-task></app-tabla-generica-task>
   </div>
 
 
   <div class="tabla">
-    <app-tabla-tareas-espera [datos]="task"></app-tabla-tareas-espera>
+    <app-tabla-tareas-espera></app-tabla-tareas-espera>
   </div>
 
 
   <div class="tabla">
-    <app-tabla-tareas-incumplidas [datos]="task"></app-tabla-tareas-incumplidas>
+    <app-tabla-tareas-incumplidas></app-tabla-tareas-incumplidas>
   </div>
-
-
 
 </div>
 
 
-<tui-drawer *tuiPopup="drawerOpen" style="background-color: #cee4ff;">
+<tui-drawer *tuiPopup="drawerOpen" style="background-color: #e7ecf2;">
   <header class="header-drawer">
     <div class="title-row" style="display: flex; align-items: center; gap: 1rem;">
       <button appearance="icon" iconStart="@tui.x" tuiIconButton type="button" (click)="cerrarDrawer()"></button>

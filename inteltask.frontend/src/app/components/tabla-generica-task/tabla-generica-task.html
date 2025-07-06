@@ -14,13 +14,15 @@
                 <input tuiInput type="text" [(ngModel)]="filtros.gis" (ngModelChange)="aplicarFiltros()" />
             </div>
 
-            <button tuiButton tuiDropdownOpen appearance="outline" type="button" size="s" [tuiDropdown]="orden"> Fecha
+            <button tuiButton tuiDropdownOpen appearance="outline" type="button" size="s" [tuiDropdown]="orden">
+                Fecha: {{ filtros.orden === 'asc' ? 'Más antigua' : 'Más reciente' }}
             </button>
+
 
             <ng-template #orden>
                 <tui-data-list tuiDataListDropdownManager>
-                    <option tuiOption [value]="'asc'">Más reciente</option>
-                    <option tuiOption [value]="'desc'">Más antigua</option>
+                    <button tuiOption (click)="setOrden('desc')">Más reciente</button>
+                    <button tuiOption (click)="setOrden('asc')">Más antigua</button>
                 </tui-data-list>
             </ng-template>
         </div>
@@ -28,8 +30,8 @@
     </div>
 
     <div class="tabla-secundaria-container">
-       
-       
+
+
         <table>
             <thead>
                 <tr>
@@ -48,24 +50,26 @@
                         <div class="title">{{ item.titulo }}</div>
                         <div class="num-gis">{{ item.numGis }}</div>
                     </td>
-                    <td>{{ item.Descripcion }}</td>
-                    <td >
-                        {{ item.nombreAsignado }}
+                    <td>{{ item.descripcion }}</td>
+                    <td>
+                        <div>{{ item.nombreAsignado }}</div>
+                        <div class="creator">ID asignado: {{ item.asignado }}</div>
                     </td>
                     <td>
                         <div>{{ item.fechaFin | date: 'dd/MM/yyyy' }}</div>
-                        <div tuiSubtitle size="s" class="creator">Cierre: {{ item.fechaLimite | date: 'dd/MM/yyyy' }}</div>
+                        <div tuiSubtitle size="s" class="creator">Cierre: {{ item.fechaLimite | date: 'dd/MM/yyyy' }}
+                        </div>
                     </td>
                     <td>
                         <div class="acciones-btn">
-                            <button tuiButton type="button" size="s" iconStart="@tui.eye" tuiHintDirection="bottom-right"
-                                tuiHint="Más detalles" appearance="flat">
+                            <button tuiButton type="button" size="s" iconStart="@tui.eye"
+                                tuiHintDirection="bottom-right" tuiHint="Más detalles" appearance="flat">
                             </button>
-                            <button tuiButton type="button" size="s" iconStart="@tui.clipboard-check" tuiHintDirection="bottom-right"
-                                tuiHint="Terminar/Aprobar Tarea" appearance="flat">
+                            <button tuiButton type="button" size="s" iconStart="@tui.clipboard-check"
+                                tuiHintDirection="bottom-right" tuiHint="Terminar/Aprobar Tarea" appearance="flat">
                             </button>
-                            <button tuiButton type="button" size="s" iconStart="@tui.clipboard-x" tuiHintDirection="bottom-right"
-                                tuiHint="Rechazar Tarea" appearance="flat">
+                            <button tuiButton type="button" size="s" iconStart="@tui.clipboard-x"
+                                tuiHintDirection="bottom-right" tuiHint="Rechazar Tarea" appearance="flat">
                             </button>
                         </div>
 

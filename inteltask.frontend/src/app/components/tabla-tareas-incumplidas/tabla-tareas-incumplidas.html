@@ -35,11 +35,10 @@
       <thead>
         <tr>
           <th>Tarea</th>
-          <th>Descripción</th>
+          <th>Justificación</th>
           <th>Asignado</th>
           <th>Fecha asignación</th>
           <th>Fecha limite</th>
-          <th>Justificación</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -48,15 +47,17 @@
       <tbody>
         <tr *ngFor="let item of datosPaginados">
           <td>
-
             <div class="title">{{ item.titulo }}</div>
+            <div class="descripcion">{{ item.descripcion }}</div>
             <div class="num-gis">{{ item.numGis }}</div>
           </td>
-          <td>{{ item.Descripcion }}</td>
-          <td>{{ item.nombreAsignado }}</td>
+          <td>{{ item.justificacionIncumplimiento }}</td>
+          <td>
+            <div>{{ item.nombreAsignado }}</div>
+            <div class="creator">ID asignado: {{ item.asignado }}</div>
+          </td>
           <td>{{ item.fechaAsignacion | date: 'dd/MM/yyyy' }}</td>
           <td>{{ item.fechaLimite | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ item.MotivoEspera }}</td>
           <td>
             <div class="acciones-btn">
               <button tuiButton size="s" iconStart="@tui.eye" tuiHint="Ver detalles completos"

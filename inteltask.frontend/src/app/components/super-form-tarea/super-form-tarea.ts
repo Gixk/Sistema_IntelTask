@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TuiButton, TuiDropdown, TuiError, TuiIcon, TuiTextfield, TuiTitle } from '@taiga-ui/core';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TuiButton, TuiDataList, TuiDropdown, TuiError, TuiIcon, TuiTextfield, TuiTitle } from '@taiga-ui/core';
 import { TuiChevron, tuiCreateTimePeriods, TuiDataListWrapper, TuiFieldErrorPipe, TuiInputDate, TuiSelect, TuiTextarea } from '@taiga-ui/kit';
 import { Tarea } from '../../models/tarea';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk/date-time';
@@ -13,7 +13,7 @@ import { Usuario } from '../../models/usuario';
   standalone: true,
   selector: 'app-super-form-tarea',
   imports: [CommonModule, ReactiveFormsModule, FormsModule, TuiTitle, TuiInputDate, TuiIcon, TuiChevron,
-    TuiTextfield, TuiTextarea, TuiDropdown, TuiDataListWrapper, TuiError, TuiSelect, TuiButton
+    TuiTextfield, TuiTextarea, TuiDropdown, TuiDataListWrapper, TuiError, TuiSelect, TuiButton, TuiDataList
   ],
   templateUrl: './super-form-tarea.html',
   styleUrl: './super-form-tarea.scss'
@@ -44,6 +44,7 @@ export class SuperFormTarea implements OnInit {
 
 
   ngOnInit(): void {
+    this.horasValidas = this.generarHorasValidas();
     this.userService.getLowUsers().subscribe({
       next: (usuarios) => {
         this.lowUsers = usuarios;
@@ -59,7 +60,8 @@ export class SuperFormTarea implements OnInit {
       gisValue: new FormControl(''),
       tituloValue: new FormControl('', [Validators.required, Validators.minLength(5)]),
       desValue: new FormControl('', [Validators.minLength(10), Validators.maxLength(300)]),
-      fechaLimite: new FormControl<TuiDay | null>(null, Validators.required),
+      fechaLimite: new FormControl<TuiDay | null>(null, [Validators.required, this.validarFecha]),
+      horaLimite: new FormControl('', [Validators.required, this.validarHora]),
       motivoEspera: new FormControl('Sin motivo de espera'),
       compleValue: new FormControl('', Validators.required),
       prioValue: new FormControl('', Validators.required),
@@ -78,9 +80,12 @@ export class SuperFormTarea implements OnInit {
       this.form.patchValue({
         gisValue: this.tarea.numGis,
         tituloValue: this.tarea.titulo,
-        desValue: this.tarea.Descripcion,
+        desValue: this.tarea.descripcion,
         fechaLimite: this.convertirADia(this.tarea.fechaLimite),
-        motivoEspera: this.tarea.MotivoEspera,
+        horaLimite: this.tarea.fechaLimite
+          ? `${this.tarea.fechaLimite.getHours().toString().padStart(2, '0')}:${this.tarea.fechaLimite.getMinutes().toString().padStart(2, '0')}`
+          : '',
+        motivoEspera: this.tarea.motivoEspera,
         compleValue: this.tarea.complejidad,
         prioValue: this.tarea.prioridad,
         asignado: this.tarea.asignado,
@@ -96,23 +101,19 @@ export class SuperFormTarea implements OnInit {
 
 
   guardarTarea(): void {
- /*    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    } */
-
-    const complejidad = this.form.get('compleValue')?.value;
-    const prioridad = this.form.get('prioValue')?.value;
-
     const tareaForm: Tarea = {
       ...this.tarea,
       titulo: this.form.get('tituloValue')?.value,
-      Descripcion: this.form.get('desValue')?.value,
-      MotivoEspera: this.form.get('motivoEspera')?.value,
+      descripcion: this.form.get('desValue')?.value,
+      motivoEspera: this.form.get('motivoEspera')?.value,
       complejidad: this.form.get('compleValue')?.value,
       prioridad: this.form.get('prioValue')?.value,
       numGis: this.form.get('gisValue')?.value,
-      fechaLimite: this.transformarFecha(this.form.get('fechaLimite')?.value),
+      fechaLimite: this.combinarFechaHora(
+        this.form.get('fechaLimite')?.value,
+        this.form.get('horaLimite')?.value
+      ),
+
       fechaAsignacion: new Date(),
       estado: 1,
       creador: 1,
@@ -130,7 +131,11 @@ export class SuperFormTarea implements OnInit {
     });
   }
 
-
+  private combinarFechaHora(dia: TuiDay | null, hora: string): Date {
+    if (!dia || !hora) return new Date();
+    const [h, m] = hora.split(':').map(Number);
+    return new Date(dia.year, dia.month, dia.day, h, m);
+  }
 
   private transformarFecha(dia: TuiDay | null): Date {
     return dia ? new Date(dia.year, dia.month, dia.day) : new Date();
@@ -148,19 +153,84 @@ export class SuperFormTarea implements OnInit {
       required: 'Este campo es obligatorio',
       minlength: 'Debe tener al menos 5 caracteres',
       maxlength: 'Este campo es demasiado largo',
-      pattern: 'El formato ingresado no es válido',
+      fechaPasada: 'La fecha no puede ser anterior a hoy',
+      noLaboral: 'Debe ser un día laboral',
+      feriado: 'La fecha es un feriado',
+      fueraHorario: 'La hora debe estar entre 07:30 y 16:30',
     };
 
     const errorKey = Object.keys(control.errors)[0];
     return mensajes[errorKey] || 'Error no identificado';
   }
 
+
+  /* !! HORARIO LABORAL */
+  horasValidas: string[] = [];
+  feriados: string[] = ['2025-01-01', '2025-04-18', '2025-05-01']; // formato YYYY-MM-DD
+
+  private generarHorasValidas(): string[] {
+    const lista: string[] = [];
+    for (let h = 7; h <= 16; h++) {
+      for (let m of [0, 30]) {
+        if (h === 7 && m < 30) continue;
+        if (h === 16 && m > 30) continue;
+        const hora = `${h.toString().padStart(2, '0')}:${m === 0 ? '00' : '30'}`;
+        lista.push(hora);
+      }
+    }
+    return lista;
+  }
+
+  validarFecha = (control: AbstractControl) => {
+    const val: TuiDay | null = control.value;
+    if (!val) return null;
+
+    const fecha = new Date(val.year, val.month, val.day);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    const esFinde = fecha.getDay() === 0 || fecha.getDay() === 6;
+    const iso = fecha.toISOString().split('T')[0];
+    const esFeriado = this.feriados.includes(iso);
+
+    if (fecha < hoy) return { fechaPasada: true };
+    if (esFinde) return { noLaboral: true };
+    if (esFeriado) return { feriado: true };
+
+    return null;
+  };
+
+  validarHora = (control: AbstractControl) => {
+    const valor: string = control.value;
+    if (!valor) return null;
+
+    const [h, m] = valor.split(':').map(Number);
+    const minutos = h * 60 + m;
+
+    if (minutos < 450 || minutos > 990) {
+      return { fueraHorario: true }; // fuera de 07:30 - 16:30
+    }
+
+    return null;
+  };
+
+
+
+
   /* MAPEO DE DATOS */
-  protected niveles = [
+  protected nivelesPrio = [
     { label: 'Muy Alta', value: 1 },
     { label: 'Alta', value: 2 },
     { label: 'Media', value: 3 },
     { label: 'Baja', value: 4 },
+    { label: 'Muy Baja', value: 5 },
+  ];
+
+  protected nivelesCom = [
+    { label: 'Muy Alta', value: 9 },
+    { label: 'Alta', value: 8 },
+    { label: 'Media', value: 7 },
+    { label: 'Baja', value: 6 },
     { label: 'Muy Baja', value: 5 },
   ];
 

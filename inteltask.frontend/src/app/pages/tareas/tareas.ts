@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Tarea } from '../../models/tarea';
 import { ServicioTarea } from '../../core/services/servicio-tarea';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,7 @@ import { TareasSupervision } from '../../components/tareas-supervision/tareas-su
     TuiDataList, TuiDataListDropdownManager, TuiButton, FormsModule,
     TuiTextfield, TuiPagination, TablaGenericaTask, TablaTareasIncumplidas,
     TablaTareasEspera, RouterModule, TuiDrawer, SuperFormTarea, Detalles,
-    TareasSupervision, 
+    TareasSupervision,
   ],
   templateUrl: './tareas.html',
   styleUrls: ['./tareas.scss'],
@@ -40,13 +40,29 @@ export class Tareas implements OnInit {
   itemsPorPag = 4;
   sortDirection: 'asc' | 'desc' = 'asc';
   openFilters = false;
-  
 
-  constructor(private tareaService: ServicioTarea) { }
+
+  filters = {
+    titulo: '',
+    asignado: '',
+    estado: null as number | null,
+  };
+
+
+  constructor(private tareaService: ServicioTarea, private detector: ChangeDetectorRef) { }
+
 
   ngOnInit(): void {
-    this.task = this.tareaService.getTareas();
-    this.updateView();
+    this.tareaService.getTareas().subscribe((tareas: Tarea[]) => {
+      this.task = tareas.map(t => ({
+        ...t,
+        fechaAsignacion: new Date(t.fechaAsignacion),
+        fechaLimite: new Date(t.fechaLimite),
+        fechaFin: t.fechaFin ? new Date(t.fechaFin) : null
+      }));
+      this.updateView();
+      this.detector.detectChanges();
+    });
   }
 
 
@@ -72,7 +88,7 @@ export class Tareas implements OnInit {
   }
 
 
-    cambiarEstado(num: number) {
+  cambiarEstado(num: number) {
     switch (num) {
       case 3:
         break;
@@ -90,13 +106,10 @@ export class Tareas implements OnInit {
   }
 
 
-
-
-
   updateView(): void {
     let result = this.task.filter((t) =>
-      t.titulo.toLowerCase().includes(this.filters.titulo.toLowerCase()) &&
-      t.nombreAsignado?.toLowerCase().includes(this.filters.asignado.toLowerCase()) &&
+      (t.titulo?.toLowerCase() ?? '').includes(this.filters.titulo.toLowerCase()) &&
+      (t.nombreAsignado?.toLowerCase() ?? '').includes(this.filters.asignado.toLowerCase()) &&
       (this.filters.estado === null || t.estado === this.filters.estado)
     );
 
@@ -151,13 +164,6 @@ export class Tareas implements OnInit {
     return diffDays <= 3;
   }
 
-
-  filters = {
-    titulo: '',
-    asignado: '',
-    estado: null as number | null,
-  };
-
   getPriorityText(prioridad: number): string {
     switch (prioridad) {
       case 1: return 'Muy Alta';
@@ -183,7 +189,7 @@ export class Tareas implements OnInit {
     }
   }
 
-    estados = [
+  estados = [
     { label: 'Registrada', value: 1 },
     { label: 'Asignada', value: 2 },
     { label: 'En proceso', value: 3 },

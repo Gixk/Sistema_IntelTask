@@ -1,7 +1,9 @@
-﻿using IntelTask.Domain.Entities;
+﻿using IntelTask.API.frontDTO;
+using IntelTask.Domain.Entities;
 using IntelTask.Domain.Interface;
 using IntelTask.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace IntelTask.API.Controllers
 {
@@ -25,7 +27,27 @@ namespace IntelTask.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var items = await _tareaRepo.GetAllTareas();
-            return Ok(items);
+
+            var listaDTO = items.Select(t => new TareaDTO
+            {
+                IdTarea = t.CN_Id_tarea,
+                IdTareaOrigen = t.CN_Tarea_origen,
+                Titulo = t.CT_Titulo_tarea ?? "",
+                Descripcion = t.CT_Descripcion_tarea ?? "",
+                MotivoEspera = t.CT_Descripcion_espera ?? "Sin motivo de espera",
+                Complejidad = t.CN_Id_complejidad,
+                Estado = t.CN_Id_estado,
+                Prioridad = t.CN_Id_prioridad,
+                NumGis = t.CN_Numero_GIS ?? "",
+                FechaAsignacion = t.CF_Fecha_asignacion,
+                FechaLimite = t.CF_Fecha_limite,
+                FechaFin = t.CF_Fecha_finalizacion,
+                Creador = t.CN_Usuario_creador,
+                Asignado = t.CN_Usuario_asignado,
+                // Opcional: NombreCreador y NombreAsignado si tienes acceso a ellos
+            }).ToList();
+
+            return Ok(listaDTO);
         }
 
 
@@ -37,7 +59,25 @@ namespace IntelTask.API.Controllers
             try
             {
                 var tareas = await _tareaRepo.GetTareasPorOrigen(idOrigen);
-                return Ok(tareas);
+                var listaDTO = tareas.Select(t => new TareaDTO
+                {
+                    IdTarea = t.CN_Id_tarea,
+                    IdTareaOrigen = t.CN_Tarea_origen,
+                    Titulo = t.CT_Titulo_tarea ?? "",
+                    Descripcion = t.CT_Descripcion_tarea ?? "",
+                    MotivoEspera = t.CT_Descripcion_espera ?? "Sin motivo de espera",
+                    Complejidad = t.CN_Id_complejidad,
+                    Estado = t.CN_Id_estado,
+                    Prioridad = t.CN_Id_prioridad,
+                    NumGis = t.CN_Numero_GIS ?? "",
+                    FechaAsignacion = t.CF_Fecha_asignacion,
+                    FechaLimite = t.CF_Fecha_limite,
+                    FechaFin = t.CF_Fecha_finalizacion,
+                    Creador = t.CN_Usuario_creador,
+                    Asignado = t.CN_Usuario_asignado
+                }).ToList();
+
+                return Ok(listaDTO);
             }
             catch (Exception ex)
             {
@@ -54,8 +94,28 @@ namespace IntelTask.API.Controllers
         {
             try
             {
-                var item = await _tareaRepo.GetTareaById(id);
-                return Ok(item);
+                var t = await _tareaRepo.GetTareaById(id);
+                if (t == null) return NotFound();
+
+                var dto = new TareaDTO
+                {
+                    IdTarea = t.CN_Id_tarea,
+                    IdTareaOrigen = t.CN_Tarea_origen,
+                    Titulo = t.CT_Titulo_tarea ?? "",
+                    Descripcion = t.CT_Descripcion_tarea ?? "",
+                    MotivoEspera = t.CT_Descripcion_espera ?? "Sin motivo de espera",
+                    Complejidad = t.CN_Id_complejidad,
+                    Estado = t.CN_Id_estado,
+                    Prioridad = t.CN_Id_prioridad,
+                    NumGis = t.CN_Numero_GIS ?? "",
+                    FechaAsignacion = t.CF_Fecha_asignacion,
+                    FechaLimite = t.CF_Fecha_limite,
+                    FechaFin = t.CF_Fecha_finalizacion,
+                    Creador = t.CN_Usuario_creador,
+                    Asignado = t.CN_Usuario_asignado
+                };
+
+                return Ok(dto);
             }
             catch (Exception ex)
             {
@@ -116,5 +176,9 @@ namespace IntelTask.API.Controllers
                 return BadRequest(new { mensaje = ex.Message });
             }
         }
+
+
+
+        //public async Task<IAC>
     }
 }

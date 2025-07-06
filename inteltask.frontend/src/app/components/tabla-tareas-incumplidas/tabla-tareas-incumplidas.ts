@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TuiButton, TuiDataList, TuiDropdown, TuiHint } from '@taiga-ui/core';
 import { TuiPagination } from '@taiga-ui/kit';
+import { Tarea } from '../../models/tarea';
+import { ServicioTarea } from '../../core/services/servicio-tarea';
 
 @Component({
   selector: 'app-tabla-tareas-incumplidas',
@@ -12,11 +14,13 @@ import { TuiPagination } from '@taiga-ui/kit';
   templateUrl: './tabla-tareas-incumplidas.html',
   styleUrl: './tabla-tareas-incumplidas.scss'
 })
-export class TablaTareasIncumplidas {
 
-  @Input() datos: any[] = [];
+
+
+export class TablaTareasIncumplidas {
   datosFiltrados: any[] = [];
   datosPaginados: any[] = [];
+  datos: Tarea[] = [];
 
   filtros = {
     titulo: '',
@@ -27,20 +31,32 @@ export class TablaTareasIncumplidas {
   length = 0;
   itemsPorPagina = 4;
 
+
+  constructor(private tareaService: ServicioTarea, private detector: ChangeDetectorRef) { }
+
   ngOnInit(): void {
-    this.aplicarFiltros();
+    this.tareaService.getTareas().subscribe((tareas: Tarea[]) => {
+      this.datos = tareas.map(t => ({
+        ...t,
+        fechaAsignacion: new Date(t.fechaAsignacion),
+        fechaLimite: new Date(t.fechaLimite),
+        fechaFin: t.fechaFin ? new Date(t.fechaFin) : null
+      }));
+      this.aplicarFiltros();
+      this.detector.detectChanges();
+    });
   }
 
   aplicarFiltros(): void {
     this.index = 0;
-  this.datosFiltrados = this.datos
-    .filter(d =>
-      d.titulo.toLowerCase().includes(this.filtros.titulo.toLowerCase()) &&
-      d.nombreAsignado.toLowerCase().includes(this.filtros.asignado.toLowerCase())
-    );
+    this.datosFiltrados = this.datos
+      .filter(d =>
+        d.titulo.toLowerCase().includes(this.filtros.titulo.toLowerCase()) &&
+        (d.nombreAsignado?.toLowerCase() ?? '').includes(this.filtros.asignado.toLowerCase())
+      );
 
-  this.length = Math.ceil(this.datosFiltrados.length / this.itemsPorPagina) || 1;
-  this.actualizarPaginados();
+    this.length = Math.ceil(this.datosFiltrados.length / this.itemsPorPagina) || 1;
+    this.actualizarPaginados();
   }
 
   actualizarPaginados(): void {

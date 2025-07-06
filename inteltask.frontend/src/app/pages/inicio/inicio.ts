@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TuiCalendar, TuiHint, TuiIcon } from '@taiga-ui/core';
 import { TuiAvatar, TuiBadge } from '@taiga-ui/kit';
 import { ServicioUsuario } from '../../core/services/servicio-usuario';
@@ -27,7 +27,8 @@ export class Inicio implements OnInit {
 
   constructor(
     private usuarioService: ServicioUsuario,
-    private notiService: ServicioNotis
+    private notiService: ServicioNotis,
+    private cdRef: ChangeDetectorRef
   ) { }
 
 
@@ -41,6 +42,8 @@ export class Inicio implements OnInit {
 
   cargarUser(): void {
     this.usuarioService.getUsuario().subscribe((usuario: Usuario) => {
+      console.log(usuario);
+      
       this.usuario = usuario;
       this.userInfo = [
         {
@@ -74,6 +77,7 @@ export class Inicio implements OnInit {
           icon: '@tui.briefcase'
         }
       ];
+      this.cdRef.detectChanges();
     });
   }
 

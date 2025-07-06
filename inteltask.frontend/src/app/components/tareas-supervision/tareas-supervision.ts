@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Tarea } from '../../models/tarea';
 import { ServicioTarea } from '../../core/services/servicio-tarea';
 import { CommonModule } from '@angular/common';
@@ -24,17 +24,26 @@ export class TareasSupervision implements OnInit {
   task: Tarea[] = [];
   filteredTasks: Tarea[] = [];
 
+
   index = 0;
   length = 0;
   itemsPorPag = 4;
   sortDirection: 'asc' | 'desc' = 'asc';
   openFilters = false;
 
-  constructor(private tareaService: ServicioTarea) { }
+  constructor(private tareaService: ServicioTarea, private detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.task = this.tareaService.getTareas();
-    this.updateView();
+    this.tareaService.getTareas().subscribe((tareas: Tarea[]) => {
+      this.task = tareas.map(t => ({
+        ...t,
+        fechaAsignacion: new Date(t.fechaAsignacion),
+        fechaLimite: new Date(t.fechaLimite),
+        fechaFin: t.fechaFin ? new Date(t.fechaFin) : null
+      }));
+      this.updateView();
+      this.detector.detectChanges();
+    });
   }
 
 
@@ -89,8 +98,8 @@ export class TareasSupervision implements OnInit {
 
   updateView(): void {
     let result = this.task.filter((t) =>
-      t.titulo.toLowerCase().includes(this.filters.titulo.toLowerCase()) &&
-      t.nombreAsignado?.toLowerCase().includes(this.filters.asignado.toLowerCase()) &&
+      (t.titulo?.toLowerCase() ?? '').includes(this.filters.titulo.toLowerCase()) &&
+      (t.nombreAsignado?.toLowerCase() ?? '').includes(this.filters.asignado.toLowerCase()) &&
       (this.filters.estado === null || t.estado === this.filters.estado)
     );
 

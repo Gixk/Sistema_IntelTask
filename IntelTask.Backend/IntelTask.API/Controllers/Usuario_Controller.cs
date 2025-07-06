@@ -1,4 +1,5 @@
-﻿using IntelTask.Domain.Entities;
+﻿using IntelTask.API.frontDTO;
+using IntelTask.Domain.Entities;
 using IntelTask.Domain.Interface;
 using IntelTask.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,21 @@ namespace IntelTask.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var items = await _userRepo.GetAllUsers();
-            return Ok(items);
+
+            var listaDTO = items.Select(u => new UsuarioDTO
+            {
+                IdUsuario = u.CN_Id_usuario,
+                NombreUsuario = u.CT_Nombre_usuario ?? "",
+                Correo = u.CT_Correo_usuario ?? "",
+                FechaNac = u.CF_Fecha_nacimiento,
+                Contra = u.CT_Contrasenna ?? "",
+                EstadoUsuario = u.CB_Estado_usuario,
+                FechaCreacion = u.CF_Fecha_creacion_usuario,
+                FechaModificacion = u.CF_Fecha_modificacion_usuario,
+                RolUsuario = u.CN_Id_rol
+            }).ToList();
+
+            return Ok(listaDTO);
         }
 
 
@@ -45,16 +60,46 @@ namespace IntelTask.API.Controllers
         public async Task<IActionResult> GetActiveUsers()
         {
             var items = await _userRepo.GetUsersActivos();
-            return Ok(items);
+
+            var listaDTO = items.Select(u => new UsuarioDTO
+            {
+                IdUsuario = u.CN_Id_usuario,
+                NombreUsuario = u.CT_Nombre_usuario ?? "",
+                Correo = u.CT_Correo_usuario ?? "",
+                FechaNac = u.CF_Fecha_nacimiento,
+                Contra = u.CT_Contrasenna ?? "",
+                EstadoUsuario = u.CB_Estado_usuario,
+                FechaCreacion = u.CF_Fecha_creacion_usuario,
+                FechaModificacion = u.CF_Fecha_modificacion_usuario,
+                RolUsuario = u.CN_Id_rol
+            }).ToList();
+
+            return Ok(listaDTO);
         }
 
 
 
-        [HttpGet("{id}")] // no se usa
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var item = await _userRepo.GetUserById(id);
-            return item != null ? Ok(item) : NotFound();
+            var u = await _userRepo.GetUserById(id);
+
+            if (u == null) return NotFound();
+
+            var dto = new UsuarioDTO
+            {
+                IdUsuario = u.CN_Id_usuario,
+                NombreUsuario = u.CT_Nombre_usuario ?? "",
+                Correo = u.CT_Correo_usuario ?? "",
+                FechaNac = u.CF_Fecha_nacimiento,
+                Contra = u.CT_Contrasenna ?? "",
+                EstadoUsuario = u.CB_Estado_usuario,
+                FechaCreacion = u.CF_Fecha_creacion_usuario,
+                FechaModificacion = u.CF_Fecha_modificacion_usuario,
+                RolUsuario = u.CN_Id_rol
+            };
+
+            return Ok(dto);
         }
 
 
@@ -62,15 +107,9 @@ namespace IntelTask.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Usuario user)
         {
-            //verificar que el usuario tenga permiso de crear
-            //!! Verificar que los datos estén completos y válidos para ingresar a la BD
-
-
             user.CF_Fecha_creacion_usuario = DateTime.Now;
             user.CF_Fecha_modificacion_usuario = DateTime.Now;
             user.CB_Estado_usuario = true;
-
-            // Se guarda la accion de crear usuario en la BD
 
             await _userRepo.AddUser(user);
 
@@ -104,7 +143,6 @@ namespace IntelTask.API.Controllers
 
             if (entidad.CN_Id_rol != 0 && entidad.CN_Id_rol != usuario.CN_Id_rol)
                 usuario.CN_Id_rol = entidad.CN_Id_rol;
-
 
 
             // Actualiza la fecha de actualizacion

@@ -45,9 +45,25 @@
     </tui-textfield>
 
 
+    <div class="form-group">
+      <label>Hora límite</label>
+      <select class="form-control" formControlName="horaLimite">
+        <option [ngValue]="null" disabled selected>Seleccione una hora</option>
+        <option *ngFor="let hora of horasValidas" [ngValue]="hora">
+          {{ hora }}
+        </option>
+      </select>
+      <tui-error *ngIf="getErrorMessage('horaLimite')">
+        {{ getErrorMessage('horaLimite') }}
+      </tui-error>
+    </div>
+
+
+
     <tui-textfield iconStart="@tui.pencil">
       <label tuiLabel>Motivo de Espera</label>
-      <textarea formControlName="motivoEspera" [disabled]="motivoEsperaDeshabilitado" placeholder="Indicaciones..." tuiTextarea [max]="5" [min]="5"></textarea>
+      <textarea formControlName="motivoEspera" [disabled]="motivoEsperaDeshabilitado" placeholder="Indicaciones..."
+        tuiTextarea [max]="5" [min]="5"></textarea>
     </tui-textfield>
 
 
@@ -57,7 +73,7 @@
       <label>Complejidad</label>
       <select class="form-control" formControlName="compleValue">
         <option [ngValue]="null" disabled selected>Seleccione complejidad</option>
-        <option *ngFor="let level of niveles" [ngValue]="level.value">{{ level.label }}</option>
+        <option *ngFor="let level of nivelesCom" [ngValue]="level.value">{{ level.label }}</option>
       </select>
     </div>
 
@@ -66,7 +82,7 @@
       <label>Prioridad</label>
       <select class="form-control" formControlName="prioValue">
         <option [ngValue]="null" disabled selected>Seleccione prioridad</option>
-        <option *ngFor="let level of niveles" [ngValue]="level.value">{{ level.label }}</option>
+        <option *ngFor="let level of nivelesPrio" [ngValue]="level.value">{{ level.label }}</option>
       </select>
     </div>
 

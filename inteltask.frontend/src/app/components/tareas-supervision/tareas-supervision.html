@@ -49,11 +49,12 @@
                 <tr *ngFor="let tarea of filteredTasks">
                     <td>
                         <div class="title">{{ tarea.titulo }}</div>
-                        <div class="description">{{ tarea.Descripcion }}</div>
+                        <div class="description">{{ tarea.descripcion }}</div>
                         <div class="num-gis">{{ tarea.numGis }}</div>
                     </td>
                     <td>
                         <div>{{ tarea.nombreAsignado }}</div>
+                        <div class="creator">ID asignado: {{ tarea.asignado }}</div>
                     </td>
                     <td class="hover-cell">
                         <span [class]="'status-' + tarea.estado">{{ getEstadoTexto(tarea.estado) }}</span>
@@ -82,7 +83,7 @@
 
                             <ng-template #opcionesTask>
                                 <tui-data-list tuiDataListDropdownManager>
-                                    <button tuiOption (click)="cambiarEstado(7)">Finalizar</button>
+                                    <button tuiOption (click)="cambiarEstado(7)">Finalizar Tarea</button>
                                     <button tuiOption (click)="dialogConfirm()">Enviar recordatorio</button>
                                     <button tuiOption (click)="editarTarea(tarea)">Editar</button>
                                 </tui-data-list>
@@ -102,35 +103,35 @@
 
 
 <tui-drawer *tuiPopup="drawerOpen" style="background-color: #cee4ff;">
-  <header class="header-drawer">
-    <div class="title-row" style="display: flex; align-items: center; gap: 1rem;">
-      <button appearance="icon" iconStart="@tui.x" tuiIconButton type="button" (click)="cerrarDrawer()"></button>
+    <header class="header-drawer">
+        <div class="title-row" style="display: flex; align-items: center; gap: 1rem;">
+            <button appearance="icon" iconStart="@tui.x" tuiIconButton type="button" (click)="cerrarDrawer()"></button>
 
-      <h4 tuiCaption style="margin: 0">
-        {{
-        modoDrawer === 'crear'
-        ? 'Nueva Tarea'
-        : modoDrawer === 'editar'
-        ? 'Actualizar Tarea'
-        : 'Informe Tarea'
-        }}
-      </h4>
+            <h4 tuiCaption style="margin: 0">
+                {{
+                modoDrawer === 'crear'
+                ? 'Nueva Tarea'
+                : modoDrawer === 'editar'
+                ? 'Actualizar Tarea'
+                : 'Informe Tarea'
+                }}
+            </h4>
+        </div>
+    </header>
+
+
+    <div>
+        <ng-container [ngSwitch]="modoDrawer">
+            <app-super-form-tarea *ngSwitchCase="'crear'" [modo]="'crear'" (tareaGuardada)="cerrarDrawer()">
+            </app-super-form-tarea>
+
+            <app-super-form-tarea *ngSwitchCase="'editar'" [modo]="'editar'" [tarea]="tareaSeleccionada"
+                (tareaGuardada)="cerrarDrawer()">
+            </app-super-form-tarea>
+
+            <app-detalles *ngSwitchCase="'detalle'" [tarea]="tareaSeleccionada">
+            </app-detalles>
+        </ng-container>
+
     </div>
-  </header>
-
-
-  <div>
-    <ng-container [ngSwitch]="modoDrawer">
-      <app-super-form-tarea *ngSwitchCase="'crear'" [modo]="'crear'" (tareaGuardada)="cerrarDrawer()">
-      </app-super-form-tarea>
-
-      <app-super-form-tarea *ngSwitchCase="'editar'" [modo]="'editar'" [tarea]="tareaSeleccionada"
-        (tareaGuardada)="cerrarDrawer()">
-      </app-super-form-tarea>
-
-      <app-detalles *ngSwitchCase="'detalle'" [tarea]="tareaSeleccionada">
-      </app-detalles>
-    </ng-container>
-
-  </div>
 </tui-drawer>

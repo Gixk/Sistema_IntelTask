@@ -2,8 +2,8 @@ export interface Tarea {
   idTarea: number;
   idTareaOrigen?: number | null;
   titulo: string;
-  Descripcion: string;
-  MotivoEspera?: string | 'Sin motivo de espera';
+  descripcion: string;
+  motivoEspera?: string | 'Sin motivo de espera';
   complejidad: number;
   estado: number;
   prioridad: number;
@@ -15,5 +15,8 @@ export interface Tarea {
   asignado: number;
   nombreCreador?: string;
   nombreAsignado?: string;
+
+  fechaIncumplimiento?: Date;
+  justificacionIncumplimiento?: string;
 }
 

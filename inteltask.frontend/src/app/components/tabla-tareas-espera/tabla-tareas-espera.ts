@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TuiButton, TuiDataList, TuiDropdown, tuiDropdown, TuiHint } from '@taiga-ui/core';
 import { TuiPagination } from '@taiga-ui/kit';
 import { Tarea } from '../../models/tarea';
+import { ServicioTarea } from '../../core/services/servicio-tarea';
 
 @Component({
   selector: 'app-tabla-tareas-espera',
@@ -14,11 +15,9 @@ import { Tarea } from '../../models/tarea';
   styleUrl: './tabla-tareas-espera.scss'
 })
 export class TablaTareasEspera implements OnInit {
-
-  @Input() datos: any[] = [];
-
   datosFiltrados: any[] = [];
   datosPaginados: any[] = [];
+  tareas: Tarea[] = [];
 
   filtros = {
     titulo: '',
@@ -29,14 +28,28 @@ export class TablaTareasEspera implements OnInit {
   length = 0;
   itemsPorPagina = 4;
 
+  constructor(private tareaService: ServicioTarea, private detector: ChangeDetectorRef) { }
+
+
   ngOnInit(): void {
-    this.aplicarFiltros();
+    this.tareaService.getTareas().subscribe((tareas: Tarea[]) => {
+      this.tareas = tareas
+      .filter(t => t.estado === 4)
+      .map(t => ({
+        ...t,
+        fechaAsignacion: new Date(t.fechaAsignacion),
+        fechaLimite: new Date(t.fechaLimite),
+        fechaFin: t.fechaFin ? new Date(t.fechaFin) : null
+      }));
+      this.aplicarFiltros();
+      this.detector.detectChanges();
+    });
   }
 
   aplicarFiltros(): void {
     this.index = 0;
 
-    this.datosFiltrados = this.datos
+    this.datosFiltrados = this.tareas
       .filter(item =>
         item.titulo.toLowerCase().includes(this.filtros.titulo.toLowerCase()) &&
         item.numGis.toLowerCase().includes(this.filtros.gis.toLowerCase())

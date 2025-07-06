@@ -12,10 +12,13 @@ namespace IntelTask.Domain.Services
     {
         private readonly Usuario_IRepository _usuarioRepo;
         private readonly Tareas_IRepository _tareaRepo;
+        private readonly Rol_IRepository _rolRepo;
 
-        public Servicios_Tarea(Usuario_IRepository usuarioRepo, Tareas_IRepository tareaRepo)
+        public Servicios_Tarea(Usuario_IRepository usuarioRepo, Tareas_IRepository tareaRepo, Rol_IRepository uofre)
             {
             _usuarioRepo = usuarioRepo;
+            _tareaRepo = tareaRepo;
+            _rolRepo = uofre;
         }
 
 
@@ -26,34 +29,39 @@ namespace IntelTask.Domain.Services
                 throw new Exception("El título de la tarea es obligatorio.");
 
             if (tarea.CF_Fecha_limite <= DateTime.Now)
-                throw new Exception("La fecha límite debe ser posterior a hoy.");
+                throw new Exception("La fecha límite debe ser posterior al día de hoy");
 
 
             if (tarea.CN_Id_estado == 0)
                 tarea.CN_Id_estado = 1; 
 
+            
 
             // Obtener usuarios para validar jerarquía
-            var creador = await _usuarioRepo.GetJerarquiaUsuario(idCreador);
-            var asignado = await _usuarioRepo.GetJerarquiaUsuario(tarea.CN_Usuario_asignado);
+            int creador = await _rolRepo.GetJerarquiaRol(idCreador);
 
 
-            if (!PuedeAsignar(creador, asignado))
-                throw new Exception("No tiene permisos para asignar tareas a este usuario.");
+            if (tarea.CN_Usuario_asignado.HasValue)
+            {
+                int asignado = await _rolRepo.GetJerarquiaRol(tarea.CN_Usuario_asignado.Value);
+
+                if (!PuedeAsignar(creador, asignado))
+                    throw new Exception("No tiene permisos para asignar tareas a este usuario.");
+            }
 
 
             tarea.CF_Fecha_asignacion = DateTime.Now;
             tarea.CN_Usuario_creador = idCreador;
             tarea.CN_Id_estado = 1;
-            // se guarda en tarea seguimiento
+
             // se guarda en bitacora acciones
 
             return await _tareaRepo.CreateTarea(tarea);
         }
 
-        private bool PuedeAsignar(int rolCreador, int jerarquia)
+        private bool PuedeAsignar(int creador, int jerarquia)
         {
-            return rolCreador switch
+            return creador switch
             {
                 1 => jerarquia == 2,
                 2 => jerarquia == 3,
@@ -87,8 +95,8 @@ namespace IntelTask.Domain.Services
             if (nuevaInfo.CN_Id_complejidad != 0)
                 tareaExistente.CN_Id_complejidad = nuevaInfo.CN_Id_complejidad;
 
-            if (nuevaInfo.CN_Id_rioridad != 0)
-                tareaExistente.CN_Id_rioridad = nuevaInfo.CN_Id_rioridad;
+            if (nuevaInfo.CN_Id_prioridad != 0)
+                tareaExistente.CN_Id_prioridad = nuevaInfo.CN_Id_prioridad;
 
             if (!string.IsNullOrWhiteSpace(nuevaInfo.CT_Descripcion_espera))
                 tareaExistente.CT_Descripcion_espera = nuevaInfo.CT_Descripcion_espera;

@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using IntelTask.Domain.Interface;
-using IntelTask.Domain.Entities;
-
 using IntelTask.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-// Acceso a datos para la entidad Usuario
+using IntelTask.Domain.Interface;
+using IntelTask.Domain.Entities;
+
+
+
 namespace IntelTask.Infrastructure.Repositorios
 {
     public class Usuario_Repositorio : Usuario_IRepository
@@ -54,8 +55,7 @@ namespace IntelTask.Infrastructure.Repositorios
         // Get all active users
         public async Task<List<Usuario?>> GetUsersActivos()
         {
-            return await _context.T_Usuarios
-                .Where(u => u.CB_Estado_usuario == true)
+            return await _context.T_Usuarios.Where(u => u.CB_Estado_usuario == true)
                 .ToListAsync();
         }
 
@@ -78,15 +78,6 @@ namespace IntelTask.Infrastructure.Repositorios
 
             try { 
                 await _context.T_Usuarios.AddAsync(user);
-                await _context.SaveChangesAsync();
-
-                var userOffice = new UserOffice // Instance of UserOffice to link user and office
-                {
-                    CN_Id_usuario = user.CN_Id_usuario,
-                    CN_Codigo_oficina = user.idOffice
-                };
-
-                await _userOfficeRepo.AddUserToOffice(userOffice); // Associate the user with the office
                 await _context.SaveChangesAsync();
 
                 // Commit the transaction if everything is successful
@@ -113,15 +104,6 @@ namespace IntelTask.Infrastructure.Repositorios
             {
                 _context.T_Usuarios.Update(user); // Update the user entity
                 await _context.SaveChangesAsync();
-
-
-                await _userOfficeRepo.UpdateUserOffice(new UserOffice
-                {
-                    CN_Id_usuario = user.CN_Id_usuario,
-                    CN_Codigo_oficina = user.idOffice
-                });
-
-
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
@@ -145,17 +127,6 @@ namespace IntelTask.Infrastructure.Repositorios
                 _context.T_Usuarios.Update(user);
                 await _context.SaveChangesAsync();
             }
-        }
-
-
-
-        public async Task<int> GetJerarquiaUsuario(int idUsuario)
-        {
-            var user = await _context.T_Usuarios
-                .Include(u => u.Rol)
-                .FirstOrDefaultAsync(u => u.CN_Id_usuario == idUsuario);
-
-            return user.Rol.CN_Jerarquia;
         }
 
     }

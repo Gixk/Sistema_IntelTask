@@ -526,12 +526,16 @@ C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\bin\Debu
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\bin\Debug\net8.0\IntelTask.Domain.pdb
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\bin\Debug\net8.0\IntelTask.Infrastructure.pdb
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\IntelTask.API.csproj.AssemblyReference.cache
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\rpswa.dswa.cache.json
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\IntelTask.API.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\IntelTask.API.AssemblyInfoInputs.cache
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\IntelTask.API.AssemblyInfo.cs
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\IntelTask.API.csproj.CoreCompileInputs.cache
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\IntelTask.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\IntelTask.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\scopedcss\bundle\IntelTask.API.styles.css
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.API\obj\Debug\net8.0\staticwebassets.build.json.cache

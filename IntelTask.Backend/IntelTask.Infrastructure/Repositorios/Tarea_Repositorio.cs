@@ -73,7 +73,7 @@ namespace IntelTask.Infrastructure.Repositorios
                 throw new Exception($"No se encontró la tarea con ID {id}");
             }
 
-            tarea.CN_Id_estado = estado;
+            tarea.CN_Id_estado = (byte)estado;
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -99,8 +99,7 @@ namespace IntelTask.Infrastructure.Repositorios
 
         public async Task<Tareas> GetTareaById(int id)
         {
-            var tarea = await _context.T_Tareas.FindAsync(id);
-            return tarea;
+            return await _context.T_Tareas.FindAsync(id);
         }
 
 

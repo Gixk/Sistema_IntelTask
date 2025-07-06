@@ -19,26 +19,35 @@ var connectionString = builder.Configuration.GetConnectionString("ConnectionInte
 builder.Services.AddDbContext<IntelTaskDbContext>(options =>
                                 options.UseSqlServer(connectionString));
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 //Registro del repositorio
-
 builder.Services.AddScoped<IDemo, DemoRepositorio>();
 builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddScoped<Usuario_IRepository, Usuario_Repositorio>();
+
 builder.Services.AddScoped<Rol_IRepository, Rol_Repositorio>();
+
 
 builder.Services.AddScoped<Oficina_IRepository, Oficina_Repositorio>();
 builder.Services.AddScoped<UserOffice_IRepo, UserOffice_Repo>();
 
+
 builder.Services.AddScoped<Tareas_IRepository, Tarea_Repositorio>();
-builder.Services.AddScoped<SeguimientoTarea_IRepository, SeguimientoTarea_Repositorio>();
-
-
 
 
 builder.Services.AddScoped<DiaNoHabli_IRepository, DiaNoHabil_Repositorio>();
+
 
 
 
@@ -58,6 +67,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// SERVICIOS DEL SISTEMA
+builder.Services.AddScoped<Servicios_Tarea>();
+builder.Services.AddScoped<Servicios_Usuario>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<Servicios_Oficina>();
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
@@ -66,7 +81,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -74,7 +89,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 

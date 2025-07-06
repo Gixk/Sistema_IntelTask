@@ -9,7 +9,7 @@ namespace IntelTask.Domain.Entities
 {
     public class Complejidades
     {
-        public int CN_Id_complejidad { get; set; }
-        public string CT_Nombre { get; set; } = string.Empty;
+        public byte CN_Id_complejidad { get; set; }
+        public string? CT_Nombre { get; set; } = string.Empty;
     }
 }

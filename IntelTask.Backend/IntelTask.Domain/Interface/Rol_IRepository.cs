@@ -14,5 +14,7 @@ namespace IntelTask.Domain.Interface
         Task AddRole(Rol rol);
         Task UpdateRole(Rol rol);
         Task DeleteRole(int id);
+
+        Task<int> GetJerarquiaRol(int rol);
     }
 }

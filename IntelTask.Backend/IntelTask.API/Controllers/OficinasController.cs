@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using IntelTask.Domain.Entities;
 using IntelTask.Domain.Interface;
+using IntelTask.Domain.Services;
 
 namespace IntelTask.API.Controllers
 {
@@ -15,11 +16,11 @@ namespace IntelTask.API.Controllers
     [Route("api/[controller]")]
     public class OficinasController : Controller
     {
-        private readonly Oficina_IRepository _ofiRepo;
+        private readonly Servicios_Oficina _ofiService;
 
-        public OficinasController(Oficina_IRepository repo)
+        public OficinasController(Servicios_Oficina serviciosOfi)
         {
-            _ofiRepo = repo;
+            _ofiService = serviciosOfi;
         }
 
 
@@ -27,12 +28,7 @@ namespace IntelTask.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllOffices()
         {
-            var oficinas = await _ofiRepo.GetAllOffices();
-            if (oficinas == null || !oficinas.Any())
-            {
-                return NotFound("No offices found.");
-            }
-
+            var oficinas = await _ofiService.ObtenerTodasLasOficinas();
             return Ok(oficinas);
         }
 
@@ -42,7 +38,7 @@ namespace IntelTask.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOfficeById(int id)
         {
-            var oficina = await _ofiRepo.GetOfficeById(id);
+            var oficina = await _ofiService.ObtenerOficinaPorId(id);
             return oficina != null ? Ok(oficina) : NotFound();
         }
 
@@ -51,8 +47,20 @@ namespace IntelTask.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOffice([FromBody] Oficina office)
         {
-            await _ofiRepo.AddOffice(office);
-            return CreatedAtAction(nameof(GetOfficeById), new { id = office.CN_Codigo_oficina }, office);
+            try
+            {
+                if (office == null)
+                {
+                    return BadRequest(new { mensaje = "Datos inválidos" });
+                }
+
+                await _ofiService.CrearOficina(office);
+                return CreatedAtAction(nameof(GetOfficeById), new { id = office.CN_Codigo_oficina }, office);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
 
 
@@ -60,19 +68,15 @@ namespace IntelTask.API.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateOffice(int id, [FromBody] Oficina office)
         {
-            var existingOffice = await _ofiRepo.GetOfficeById(id);
-            if (existingOffice == null)
+            try
             {
-                return NotFound();
+                var ok = await _ofiService.ActualizarOficina(id, office);
+                return NoContent();
             }
-
-            if(office.CT_Nombre_oficina != null)
-                existingOffice.CT_Nombre_oficina = office.CT_Nombre_oficina;
-            if(office.CN_Oficina_encargada != 0)
-                existingOffice.CN_Oficina_encargada = office.CN_Oficina_encargada;
-
-            await _ofiRepo.UpdateOffice(office);
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
 
     }

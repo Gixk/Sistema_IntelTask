@@ -13,12 +13,10 @@ namespace IntelTask.Infrastructure.Repositorios
     public class Oficina_Repositorio : Oficina_IRepository
     {
         private readonly IntelTaskDbContext _context;
-        private readonly UserOffice_IRepo _userOfficeRepo; 
 
-        public Oficina_Repositorio (IntelTaskDbContext context, UserOffice_IRepo repo) 
+        public Oficina_Repositorio (IntelTaskDbContext context) 
         { 
             _context = context;
-            _userOfficeRepo = repo;
         }
 
 
@@ -47,7 +45,19 @@ namespace IntelTask.Infrastructure.Repositorios
 
         public async Task UpdateOffice(Oficina oficina)
         {
-            _context.T_Oficinas.Update(oficina);
+            var tracked = await _context.T_Oficinas.FindAsync(oficina.CN_Codigo_oficina);
+            if (tracked == null)
+            {
+                throw new Exception("Oficina no encontrada para actualización.");
+            }
+
+            // Solo actualiza los campos necesarios
+            if (!string.IsNullOrWhiteSpace(oficina.CT_Nombre_oficina))
+                tracked.CT_Nombre_oficina = oficina.CT_Nombre_oficina;
+
+            if (oficina.CN_Oficina_encargada.HasValue)
+                tracked.CN_Oficina_encargada = oficina.CN_Oficina_encargada;
+
             await _context.SaveChangesAsync();
         }
     }

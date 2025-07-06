@@ -7,7 +7,7 @@ import { error } from 'console';
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   
   const auth = inject(Auth); /* Inyección del servicio de autenticación */
-  const token = auth.obtenerToken(); 
+  const token = typeof window !== 'undefined' ? auth.obtenerToken() : null; 
 
   if (token) {
     req = req.clone({

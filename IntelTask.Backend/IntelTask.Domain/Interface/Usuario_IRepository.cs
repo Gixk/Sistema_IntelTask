@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-// Define the funcionalities applying to the Usuario entity
 namespace IntelTask.Domain.Interface
 {
     public interface Usuario_IRepository
@@ -24,8 +23,6 @@ namespace IntelTask.Domain.Interface
         Task UpdateUser(Usuario user);
 
         Task ChangeUserStatus(int id);
-
-        Task<int> GetJerarquiaUsuario(int id);
 
     }
 }

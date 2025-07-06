@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IntelTask.Domain.Entities;
-using IntelTask.Domain.Interface;
 using IntelTask.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
+using IntelTask.Domain.Entities;
+using IntelTask.Domain.Interface;
 
 // Aplica la logica del negocio para la entidad Rol
 namespace IntelTask.Infrastructure.Repositorios
 {
+
     public class Rol_Repositorio : Rol_IRepository
     {
         private readonly IntelTaskDbContext _context;
-        public Rol_Repositorio(IntelTaskDbContext context) { _context = context; }
+
+
+        public Rol_Repositorio(IntelTaskDbContext context) 
+        {
+            _context = context;
+        }
 
 
         public async Task<List<Rol>> GetAllRoles()
@@ -59,5 +65,15 @@ namespace IntelTask.Infrastructure.Repositorios
             }
         }
 
+
+        public async Task<int> GetJerarquiaRol(int rol)
+        {
+            var rolEntity = await _context.T_Roles.FindAsync(rol);
+            if (rolEntity != null)
+            {
+                return rolEntity.CN_Jerarquia;
+            }
+            throw new Exception("Rol no encontrado");
+        }
     }
 }

@@ -23,7 +23,9 @@ namespace IntelTask.Infrastructure.Repositorios
 
         public async Task<IEnumerable<DiasNoHabiles>> ObtenerDias()
         {
-            return await _context.NoHabiles.ToListAsync();
+            return await _context.NoHabiles.Where(d => d.CB_Activo == true)
+                                           .OrderBy(d => d.CF_Fecha_inicio)
+                                           .ToListAsync();
         }
     }
 }

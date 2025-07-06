@@ -22,22 +22,27 @@ export class Auth {
 
   /* Verifica existencia del usuario */
   autenticar(user: string, password: string) {
-    return this.http.post(`${this.urlAPI}/Auth/login`, { 
+    return this.http.post(`${this.urlAPI}/Auth/login`, {
       CT_Correo_usuario: user,
       CT_Contrasenna: password
-     });
+    });
   }
 
 
   /* & Almacena en localstorage el token */
-  guardarToken(token: string): void{
-    localStorage.setItem('token', token);
+  guardarToken(token: string): void {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', token);
+    }
   }
 
 
 
   obtenerToken(): string | null {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
 
@@ -69,7 +74,9 @@ export class Auth {
 
   /* & Cierra Sesión */
   logout() {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
     this.router.navigate(['']);
   }
 

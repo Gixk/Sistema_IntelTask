@@ -25,7 +25,7 @@ namespace IntelTask.Domain.Services
 
         public async Task<String> AuthenticateUserAsync(Autenticacion auth)
         {
-            var autenticado = await _userRepo.verificarUsuario(auth.CT_Correo_usuario, auth.CT_Contrasenna);
+            var autenticado = await _userRepo.VerificarUsuario(auth.CT_Correo_usuario, auth.CT_Contrasenna);
             if (autenticado == null)
             {
                 throw new Exception("Usuario o contraseña incorrectos");

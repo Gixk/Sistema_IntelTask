@@ -10,7 +10,5 @@ namespace IntelTask.Domain.Entities
     {
         public int CN_Id_usuario { get; set; }
         public int CN_Codigo_oficina { get; set; }
-        public Usuario Usuario { get; set; }
-        public Oficina Oficina { get; set; }
     }
 }

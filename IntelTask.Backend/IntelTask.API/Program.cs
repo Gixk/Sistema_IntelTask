@@ -10,13 +10,19 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 //! Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("ConnectionIntel");
+
+
 
 builder.Services.AddDbContext<IntelTaskDbContext>(options =>
                                 options.UseSqlServer(connectionString));
 
+
+
 //Registro del repositorio
+
 builder.Services.AddScoped<IDemo, DemoRepositorio>();
 builder.Services.AddScoped<AuthService>();
 
@@ -28,6 +34,11 @@ builder.Services.AddScoped<UserOffice_IRepo, UserOffice_Repo>();
 
 builder.Services.AddScoped<Tareas_IRepository, Tarea_Repositorio>();
 builder.Services.AddScoped<SeguimientoTarea_IRepository, SeguimientoTarea_Repositorio>();
+
+
+
+
+builder.Services.AddScoped<DiaNoHabli_IRepository, DiaNoHabil_Repositorio>();
 
 
 

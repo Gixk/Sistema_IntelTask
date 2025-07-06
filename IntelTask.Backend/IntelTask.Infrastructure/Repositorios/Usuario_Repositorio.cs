@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using IntelTask.Domain.Interface;
 using IntelTask.Domain.Entities;
+
 using IntelTask.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -16,15 +17,13 @@ namespace IntelTask.Infrastructure.Repositorios
     public class Usuario_Repositorio : Usuario_IRepository
     {
         private readonly IntelTaskDbContext _context;
-        private readonly UserOffice_IRepo _userOfficeRepo; 
-        
+        private readonly UserOffice_IRepo _userOfficeRepo;
         
         
         public Usuario_Repositorio(IntelTaskDbContext context, UserOffice_IRepo userOfficeRepo) { 
             _context = context; 
             _userOfficeRepo = userOfficeRepo;
         }
-
 
 
         public async Task<Autenticacion?> VerificarUsuario(string correo, string contrasena)
@@ -53,7 +52,7 @@ namespace IntelTask.Infrastructure.Repositorios
 
 
         // Get all active users
-        public async Task<List<Usuario>> GetUsersActivos()
+        public async Task<List<Usuario?>> GetUsersActivos()
         {
             return await _context.T_Usuarios
                 .Where(u => u.CB_Estado_usuario == true)
@@ -69,27 +68,6 @@ namespace IntelTask.Infrastructure.Repositorios
         }
 
 
-        // Obtener un usuario y su oficina asociada
-        public async Task<object>? GetOfficeUser(int id)
-        {
-            var oficinaUsuario = await _userOfficeRepo.ObtenerOficinaUsuario(id);
-            var usuario = await _context.T_Usuarios
-                                .Include(u => u.Rol)
-                                .FirstOrDefaultAsync(u => u.CN_Id_usuario == id);
-
-            var resultado = new
-            {
-                id = usuario.CN_Id_usuario,
-                nombre = usuario.CT_Nombre_usuario,
-                correo = usuario.CT_Correo_usuario,
-                codigo = oficinaUsuario.Codigo,
-                oficina = oficinaUsuario.Oficina,
-                encargada = oficinaUsuario.Encargada,
-                rolUser = usuario.Rol.CT_Nombre_rol
-            };
-
-            return resultado;
-        }
 
 
         // add a new user and associate them with an office
@@ -180,26 +158,6 @@ namespace IntelTask.Infrastructure.Repositorios
             return user.Rol.CN_Jerarquia;
         }
 
-
-        public async Task DeleteUser(int id)
-        {
-            var user = await _context.T_Usuarios.FindAsync(id);
-            if (user != null)
-            {
-                _context.T_Usuarios.Remove(user);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public Task<Autenticacion> verificarUsuario(string email, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsUserInOffice(int id, int officeId)
-        {
-            throw new NotImplementedException();
-        }
     }
     
 }

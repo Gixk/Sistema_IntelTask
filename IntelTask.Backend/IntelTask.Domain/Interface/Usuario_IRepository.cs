@@ -11,15 +11,13 @@ namespace IntelTask.Domain.Interface
 {
     public interface Usuario_IRepository
     {
-        Task<Autenticacion> verificarUsuario(string email, string password);
+        Task<Autenticacion> VerificarUsuario(string email, string password);
 
         Task<List<Usuario>> GetAllUsers();
 
         Task<List<Usuario?>> GetUsersActivos();
 
-        Task<Usuario?> GetUserById(int id); // no se usa
-
-        Task<object>? GetOfficeUser(int id);
+        Task<Usuario?> GetUserById(int id);
 
         Task AddUser(Usuario user);
 
@@ -29,8 +27,5 @@ namespace IntelTask.Domain.Interface
 
         Task<int> GetJerarquiaUsuario(int id);
 
-        Task<bool> IsUserInOffice(int id, int officeId);
-
-        Task DeleteUser(int id);
     }
 }

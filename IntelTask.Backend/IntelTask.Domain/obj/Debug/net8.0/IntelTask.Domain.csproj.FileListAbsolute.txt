@@ -9,12 +9,15 @@ C:\Users\User\source\repos\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\I
 C:\Users\User\source\repos\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\refint\IntelTask.Domain.dll
 C:\Users\User\source\repos\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.pdb
 C:\Users\User\source\repos\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\ref\IntelTask.Domain.dll
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\bin\Debug\net8.0\IntelTask.Domain.deps.json
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\bin\Debug\net8.0\IntelTask.Domain.dll
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\bin\Debug\net8.0\IntelTask.Domain.pdb
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.csproj.AssemblyReference.cache
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.AssemblyInfoInputs.cache
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.AssemblyInfo.cs
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.csproj.CoreCompileInputs.cache
-C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.sourcelink.json
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.dll
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\refint\IntelTask.Domain.dll
 C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\IntelTask.Domain.pdb
+C:\Users\User\source\proyecto_IntelTask\IntelTask.Backend\IntelTask.Domain\obj\Debug\net8.0\ref\IntelTask.Domain.dll

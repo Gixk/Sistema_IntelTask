@@ -13,8 +13,8 @@ namespace IntelTask.Domain.Services
         private readonly Usuario_IRepository _usuarioRepo;
         private readonly Tareas_IRepository _tareaRepo;
 
-        public Servicios_Tarea(Usuario_IRepository usuarioRepo)
-        {
+        public Servicios_Tarea(Usuario_IRepository usuarioRepo, Tareas_IRepository tareaRepo)
+            {
             _usuarioRepo = usuarioRepo;
         }
 
@@ -110,6 +110,9 @@ namespace IntelTask.Domain.Services
 
 
         public bool CambiarEstadoTarea()
-
+        {
+            // Implementación pendiente
+            return false; // Retorno temporal para evitar errores de compilación
+        }
     }
 }

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace IntelTask.Domain.Interface
 {
-    public interface UserOffice_IRepo {    
-        Task AddUserToOffice(UserOffice val);
-
-        Task UpdateUserOffice(UserOffice id);
+    public interface DiaNoHabli_IRepository
+    {
+        Task<IEnumerable<DiasNoHabiles>> ObtenerDias();
     }
 }

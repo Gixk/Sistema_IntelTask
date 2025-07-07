@@ -105,7 +105,18 @@ Para ejecutar IntelTask de forma local, es necesario contar con el entorno para 
 
 ```bash
 git clone https://github.com/Gixk/Sistema_IntelTask.git
-cd inteltask
+cd proyecto_IntelTask
 
+### Backend
+
+- cd IntelTask.Backend
+- configurar cadena de conexion a base de datos en appsettings.json
+- dotnet run
+
+### Frontend
+- cd inteltask.frontend
+- npm install
+- ng serve
+- abrir en navegador http://localhost:4200
 
 **Nota:** Este sistema fue desarrollado como prototipo funcional. No incluye integración con sistemas externos ni autenticación federada.

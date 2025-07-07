@@ -88,5 +88,24 @@ El sistema permite generación de reportes de tareas y permisos desde el módulo
 Versión prototipo funcional desarrollado en entorno académico. Sin integración externa.
 De momento se mantiene funcional solamente el módulo de tareas, control de roles y jerarquias y autenticacion de usuario.
 
+## Ejecución local del proyecto
+
+Para ejecutar IntelTask de forma local, es necesario contar con el entorno para backend y frontend configurado de forma independiente.
+
+### Requisitos
+
+- .NET 8 SDK o superior
+- Node.js 18 o superior
+- Angular CLI
+- SQL Server 2019+
+- Visual Studio / VS Code
+- Navegador moderno (Chrome, Firefox, Edge)
+
+### Clonar el repositorio
+
+```bash
+git clone https://github.com/Gixk/Sistema_IntelTask.git
+cd inteltask
+
 
 **Nota:** Este sistema fue desarrollado como prototipo funcional. No incluye integración con sistemas externos ni autenticación federada.

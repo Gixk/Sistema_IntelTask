@@ -124,6 +124,8 @@ namespace IntelTask.API.Controllers
         }
 
 
+
+
         [HttpPatch("estado/{id}/{estado}")]
         public async Task<IActionResult> UpdateEstado(int id, int estado)
         {
@@ -143,12 +145,12 @@ namespace IntelTask.API.Controllers
 
 
 
-        [HttpPost("{id}")]
-        public async Task<IActionResult> CrearTarea([FromBody] Tareas nuevaTarea, [FromQuery] int idCreadorTarea)
+        [HttpPost("{idCreador}")]
+        public async Task<IActionResult> CrearTarea([FromRoute] int idCreador, [FromBody] Tareas nuevaTarea)
         {
             try
             {
-                var tareaCreada = await _servTareas.CrearTarea(nuevaTarea, idCreadorTarea);
+                var tareaCreada = await _servTareas.CrearTarea(nuevaTarea, idCreador);
 
                 return CreatedAtAction(nameof(GetById), new { id = tareaCreada.CN_Id_tarea }, tareaCreada);
             }

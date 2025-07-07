@@ -66,6 +66,7 @@ export class TareasSupervision implements OnInit {
 
   cerrarDrawer(): void {
     this.drawerOpen = false;
+    this.ngOnInit();
   }
 
 

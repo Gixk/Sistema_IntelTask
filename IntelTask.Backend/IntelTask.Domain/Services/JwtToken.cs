@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace IntelTask.Domain.Services
 {
-    internal class JwtSecurityToken
+    internal class JwtToken
     {
         private string? issuer;
         private string? audience;
@@ -11,7 +11,7 @@ namespace IntelTask.Domain.Services
         private DateTime expires;
         private SigningCredentials signingCredentials;
 
-        public JwtSecurityToken(string? issuer, string? audience, Claim[] claims, DateTime expires, SigningCredentials signingCredentials)
+        public JwtToken(string? issuer, string? audience, Claim[] claims, DateTime expires, SigningCredentials signingCredentials)
         {
             this.issuer = issuer;
             this.audience = audience;

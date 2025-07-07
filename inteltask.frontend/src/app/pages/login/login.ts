@@ -35,6 +35,7 @@ export class Login {
     if (this.form.invalid) return;
 
     const { user, password } = this.form.value;
+     console.log('Login con:', user, password);
 
     this.auth.autenticar(user!, password!).subscribe({
       next: (resp: any) => {
@@ -45,20 +46,11 @@ export class Login {
     });
   }
 
-
+  
   login2(){
     this.router.navigate(['/inicio']);
   }
 
-
-
   cambiarContraseña(): void { }
-
-  /*
-  logout() {
-    this.authService.logout();
-  }
-  
-  */
 
 }

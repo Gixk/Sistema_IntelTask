@@ -8,8 +8,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "auth",
-        "Type": "IntelTask.Domain.Entities.Autenticacion",
+        "Name": "login",
+        "Type": "IntelTask.API.frontDTO.LoginDTO",
         "IsRequired": true
       }
     ],
@@ -274,32 +274,6 @@
   },
   {
     "ContainingType": "IntelTask.API.Controllers.TareasController",
-    "Method": "CrearTarea",
-    "RelativePath": "api/Tareas/{id}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "nuevaTarea",
-        "Type": "IntelTask.Domain.Entities.Tareas",
-        "IsRequired": true
-      },
-      {
-        "Name": "idCreadorTarea",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "id",
-        "Type": "",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "IntelTask.API.Controllers.TareasController",
     "Method": "EditarTarea",
     "RelativePath": "api/Tareas/{id}",
     "HttpMethod": "PATCH",
@@ -313,6 +287,27 @@
       },
       {
         "Name": "nuevaInfo",
+        "Type": "IntelTask.Domain.Entities.Tareas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IntelTask.API.Controllers.TareasController",
+    "Method": "CrearTarea",
+    "RelativePath": "api/Tareas/{idCreador}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idCreador",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "nuevaTarea",
         "Type": "IntelTask.Domain.Entities.Tareas",
         "IsRequired": true
       }

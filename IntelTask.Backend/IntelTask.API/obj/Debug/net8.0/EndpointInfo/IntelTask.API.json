@@ -14,17 +14,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Autenticacion"
+                "$ref": "#/components/schemas/LoginDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Autenticacion"
+                "$ref": "#/components/schemas/LoginDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Autenticacion"
+                "$ref": "#/components/schemas/LoginDTO"
               }
             }
           }
@@ -459,53 +459,6 @@
           }
         }
       },
-      "post": {
-        "tags": [
-          "Tareas"
-        ],
-        "parameters": [
-          {
-            "name": "idCreadorTarea",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Tareas"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Tareas"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Tareas"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
       "patch": {
         "tags": [
           "Tareas"
@@ -572,6 +525,48 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tareas/{idCreador}": {
+      "post": {
+        "tags": [
+          "Tareas"
+        ],
+        "parameters": [
+          {
+            "name": "idCreador",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tareas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tareas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tareas"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -721,29 +716,6 @@
   },
   "components": {
     "schemas": {
-      "Autenticacion": {
-        "type": "object",
-        "properties": {
-          "cT_Nombre_usuario": {
-            "type": "string",
-            "nullable": true
-          },
-          "cT_Correo_usuario": {
-            "type": "string",
-            "nullable": true
-          },
-          "cT_Contrasenna": {
-            "type": "string",
-            "nullable": true
-          },
-          "cT_Rol": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "EDemo": {
         "type": "object",
         "properties": {
@@ -752,6 +724,20 @@
             "format": "int32"
           },
           "tC_Descripcion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginDTO": {
+        "type": "object",
+        "properties": {
+          "cT_Correo_usuario": {
+            "type": "string",
+            "nullable": true
+          },
+          "cT_Contrasenna": {
             "type": "string",
             "nullable": true
           }

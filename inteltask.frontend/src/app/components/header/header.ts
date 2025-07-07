@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TuiDataList, TuiDropdown, TuiIcon } from '@taiga-ui/core';
 import { TuiTabs } from '@taiga-ui/kit'
+import { Auth } from '../../core/AuthService/auth';
 
 
 @Component({
@@ -15,9 +16,18 @@ import { TuiTabs } from '@taiga-ui/kit'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Header {
-
     protected readonly tabs = ['Inicio', 'Tareas', 'Permisos', 'Oficinas', 'Notificaciones'];
     protected activeElement = this.tabs[0];
+    nombreUser: string = '';
+    rol: string = '';
+
+    constructor(private auth: Auth) {
+      const datos = this.auth.obtenerDatosToken();
+      if (datos) {
+        this.nombreUser = datos.nombre;
+        this.rol = this.mapearRol(datos.rol);
+      }
+    }
 
     protected get activeItemIndex(): number {
         return this.tabs.indexOf(this.activeElement);
@@ -41,7 +51,21 @@ export class Header {
     
     onLogoutClick(): void {
     console.log('Cerrando sesión...');
+    this.auth.logout();
     }
 
-    //private readonly dialogConfirm = inject(Prompt);
+    private mapearRol(rol: number): string {
+    const roles: { [key: number]: string } = {
+      1: 'Director',
+      2: 'Subdirector',
+      3: 'Jefe',
+      4: 'Coordinador',
+      5: 'Profesional 3',
+      6: 'Profesional 2',
+      7: 'Profesional 1',
+      8: 'Técnico',
+      9: 'Administrador',
+    };
+    return roles[rol] || 'Desconocido';
+  }
 }

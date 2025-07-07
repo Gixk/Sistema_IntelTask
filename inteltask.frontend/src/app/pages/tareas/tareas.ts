@@ -12,6 +12,8 @@ import { RouterModule } from '@angular/router';
 import { SuperFormTarea } from '../../components/super-form-tarea/super-form-tarea';
 import { Detalles } from '../../components/detalles/detalles';
 import { TareasSupervision } from '../../components/tareas-supervision/tareas-supervision';
+import { Auth } from '../../core/AuthService/auth';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Component({
@@ -43,16 +45,26 @@ export class Tareas implements OnInit {
 
 
   filters = {
-    titulo: '',
+    gis: '',
     asignado: '',
     estado: null as number | null,
   };
 
 
-  constructor(private tareaService: ServicioTarea, private detector: ChangeDetectorRef) { }
+  constructor(
+    private tareaService: ServicioTarea,
+    private detector: ChangeDetectorRef,
+    private auth: Auth
+  ) { }
 
+  mostrarSupervision$ = new BehaviorSubject<boolean>(false);
 
   ngOnInit(): void {
+
+    const rol = this.auth.getRol();
+    const visible = [1, 2, 3, 4, 5, 9].includes(rol ?? -1);
+    this.mostrarSupervision$.next(visible);
+
     this.tareaService.getTareas().subscribe((tareas: Tarea[]) => {
       this.task = tareas.map(t => ({
         ...t,
@@ -71,6 +83,7 @@ export class Tareas implements OnInit {
   modoDrawer: 'crear' | 'editar' | 'detalle' = 'detalle';
   tareaSeleccionada?: Tarea;
 
+
   nuevaTarea(): void {
     this.modoDrawer = 'crear';
     this.tareaSeleccionada = undefined;
@@ -87,6 +100,29 @@ export class Tareas implements OnInit {
     this.drawerOpen = false;
   }
 
+
+  updateView(): void {
+    let result = this.task.filter((t) =>
+      (t.numGis.toLowerCase() ?? '').includes(this.filters.gis.toLowerCase()) &&
+      (t.nombreAsignado?.toLowerCase() ?? '').includes(this.filters.asignado.toLowerCase()) &&
+      (this.filters.estado === null || t.estado === this.filters.estado)
+    );
+
+    result = result.sort((a, b) => {
+      const dateA = a.fechaLimite.getTime();
+      const dateB = b.fechaLimite.getTime();
+      return this.sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+    this.length = Math.ceil(result.length / this.itemsPorPag) || 1;
+
+    const start = this.index * this.itemsPorPag;
+    const end = start + this.itemsPorPag;
+    this.filteredTasks = result.slice(start, end);
+  }
+
+
+  
 
   cambiarEstado(num: number) {
     switch (num) {
@@ -105,27 +141,6 @@ export class Tareas implements OnInit {
     console.log('Generar reporte');
   }
 
-
-  updateView(): void {
-    let result = this.task.filter((t) =>
-      (t.titulo?.toLowerCase() ?? '').includes(this.filters.titulo.toLowerCase()) &&
-      (t.nombreAsignado?.toLowerCase() ?? '').includes(this.filters.asignado.toLowerCase()) &&
-      (this.filters.estado === null || t.estado === this.filters.estado)
-    );
-
-    result = result.sort((a, b) => {
-      const dateA = a.fechaLimite.getTime();
-      const dateB = b.fechaLimite.getTime();
-      return this.sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
-    });
-
-    this.length = Math.ceil(result.length / this.itemsPorPag) || 1;
-
-    const start = this.index * this.itemsPorPag;
-    const end = start + this.itemsPorPag;
-    this.filteredTasks = result.slice(start, end);
-  }
-
   goToPage(index: number): void {
     this.index = index;
     this.updateView();
@@ -137,7 +152,7 @@ export class Tareas implements OnInit {
   }
 
   clearFilters(): void {
-    this.filters = { titulo: '', asignado: '', estado: null };
+    this.filters = { gis: '', asignado: '', estado: null };
     this.applyFilters();
   }
 

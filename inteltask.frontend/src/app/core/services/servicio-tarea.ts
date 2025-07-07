@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tarea } from '../../models/tarea';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Auth } from '../AuthService/auth';
 
 
 @Injectable({
@@ -11,72 +12,34 @@ import { HttpClient } from '@angular/common/http';
 export class ServicioTarea {
   private readonly urlAPI = 'https://localhost:5001/api';
 
-  private tareas: Tarea[] = [
-    {
-      idTarea: 1,
-      idTareaOrigen: null,
-      titulo: "Actualizar base de datos",
-      descripcion: "Actualizar la base con la nueva info de usuarios.",
-      motivoEspera: "Tarea completada y validada por QA.",
-      complejidad: 2,
-      estado: 1,
-      prioridad: 5,
-      numGis: "GIS2025-001",
-      fechaAsignacion: new Date("2025-06-01"),
-      fechaLimite: new Date("2025-10-10"),
-      fechaFin: new Date("2025-12-10"),
-      creador: 125,
-      asignado: 201,
-      nombreCreador: "Creador tarea 1",
-      nombreAsignado: "Luis Ramirez Artavia"
-    },
-    {
-      idTarea: 6,
-      idTareaOrigen: null,
-      titulo: "Probar nuevas notificaciones",
-      descripcion: "Validar el sistema push en staging.",
-      motivoEspera: "",
-      complejidad: 2,
-      estado: 3,
-      prioridad: 3,
-      numGis: "GIS2025-006",
-      fechaAsignacion: new Date("2025-06-07"),
-      fechaLimite: new Date("2025-06-14"),
-      fechaFin: new Date("2025-12-10"),
-      creador: 125,
-      asignado: 202,
-      nombreCreador: "creador tarea 2",
-      nombreAsignado: "Pedro"
-    }];
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: Auth) { }
 
 
-  
+
   getTareas(): Observable<Tarea[]> {
-     return this.http.get<Tarea[]>(`${this.urlAPI}/Tareas`);
+    return this.http.get<Tarea[]>(`${this.urlAPI}/Tareas`);
   }
 
 
   //getTareasAsignadas(): Observable<Tarea[]>{}
 
-  getTareasUsuario(id: number): Tarea | undefined {
-    return this.tareas.find(t => t.idTarea === id);
+  getTareasUsuario(id: number): void {
+    // return this.tareas.find(t => t.idTarea === id);
   }
 
 
-  getTareasCreador(){}
+  getTareasCreador() { }
 
 
-  getTareasIncumplidas(){}
+  getTareasIncumplidas() { }
 
 
-  getIncumplidasUsuario(){}
+  getIncumplidasUsuario() { }
 
 
-  getTareasRevision(){}
+  getTareasRevision() { }
 
-  getTReviUsuario(){}
+  getTReviUsuario() { }
 
 
   cambiarEstadoTarea() {
@@ -85,14 +48,46 @@ export class ServicioTarea {
 
 
   crearTarea(tarea: Tarea) {
-    alert('Tarea Creada');
-    //return this.http.post<Tarea>(`${this.urlAPI}`, tare);
-    return of(tarea);
+    const idCreador = this.auth.obtenerDatosToken()?.rol;
+
+    const payload = {
+      cn_Id_tarea: tarea.idTarea,
+      cn_Tarea_origen: tarea.idTareaOrigen,
+      ct_Titulo_tarea: tarea.titulo,
+      ct_Descripcion_tarea: tarea.descripcion,
+      ct_Descripcion_espera: tarea.motivoEspera,
+      cn_Id_complejidad: tarea.complejidad,
+      cn_Id_estado: tarea.estado,
+      cn_Id_prioridad: tarea.prioridad,
+      cn_Numero_GIS: tarea.numGis,
+      cf_Fecha_asignacion: tarea.fechaAsignacion,
+      cf_Fecha_limite: tarea.fechaLimite,
+      cf_Fecha_finalizacion: tarea.fechaFin || new Date(),
+      cn_Usuario_creador: this.auth.obtenerDatosToken()?.identificador,
+      cn_Usuario_asignado: tarea.asignado,
+    };
+    return this.http.post<Tarea>(`${this.urlAPI}/Tareas/${idCreador}`, payload);
   }
 
-  actualizarTarea(tarea: Tarea)/* : Observable<Tarea>  */{
-    alert('Tarea actualizada');
-    return of(tarea);
-   //return this.http.patch<Tarea>(`${this.urlAPI}/${tarea.idTarea}`, tarea);
+
+  actualizarTarea(tarea: Tarea) {
+
+      const payload = {
+    cn_Id_tarea: tarea.idTarea,
+    cn_Tarea_origen: tarea.idTareaOrigen,
+    ct_Titulo_tarea: tarea.titulo,
+    ct_Descripcion_tarea: tarea.descripcion,
+    ct_Descripcion_espera: tarea.motivoEspera,
+    cn_Id_complejidad: tarea.complejidad,
+    cn_Id_estado: tarea.estado,
+    cn_Id_prioridad: tarea.prioridad,
+    cn_Numero_GIS: tarea.numGis,
+    cf_Fecha_asignacion: tarea.fechaAsignacion,
+    cf_Fecha_limite: tarea.fechaLimite,
+    cf_Fecha_finalizacion: tarea.fechaFin || new Date(),
+    cn_Usuario_creador: tarea.creador,
+    cn_Usuario_asignado: tarea.asignado
+  };
+    return this.http.patch<Tarea>(`${this.urlAPI}/Tareas/${tarea.idTarea}`, payload);
   }
 }

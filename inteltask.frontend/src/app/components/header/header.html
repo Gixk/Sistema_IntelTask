@@ -32,8 +32,8 @@
         <tui-button tuiButton tuiChevron type="button" tuiDropdownOpen [tuiDropdown]="dropdown">
             <div id="user" class="user-container">
                 <div class="user-text">
-                    <span class="user-name">Nombre usuario</span>
-                    <span class="user-role">rol de usuario</span>
+                    <span class="user-name">{{ nombreUser }}</span>
+                    <span class="user-role">{{ rol }}</span>
                 </div>
                 <tui-icon icon="@tui.circle-user-round" size="l" class="user-icon"></tui-icon>
             </div>
@@ -41,7 +41,6 @@
 
         <ng-template #dropdown>
             <tui-data-list tuiDataListDropdownManager>
-                <button tuiOption (click)="onProfileClick()">Perfil</button>
                 <button tuiOption (click)="onSettingsClick()">Configuraciones</button>
                 <button tuiOption (click)="onLogoutClick()">Cerrar sesión</button>
             </tui-data-list>

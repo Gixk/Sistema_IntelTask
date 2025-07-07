@@ -14,11 +14,11 @@ export const routes: Routes = [
         path: '',
         component: DefaultLayout,
         children: [
-            { path: 'inicio', component: Inicio, /* canActivate: [AuthGuard] */ },
-            { path: 'tareas', component: Tareas },
-            { path: 'permisos', component: Permisos },
-            { path: 'oficinas', component: Oficinas },
-            { path: 'notis', component: Notificaciones, canActivate: [AuthGuard], data: { roles: [2, 3] } },
+            { path: 'inicio', component: Inicio, canActivate: [AuthGuard],  },
+            { path: 'tareas', component: Tareas, canActivate: [AuthGuard],  },
+            { path: 'permisos', component: Permisos, canActivate: [AuthGuard] },
+            { path: 'oficinas', component: Oficinas, canActivate: [AuthGuard],  },
+            { path: 'notis', component: Notificaciones, canActivate: [AuthGuard] },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ],
     },

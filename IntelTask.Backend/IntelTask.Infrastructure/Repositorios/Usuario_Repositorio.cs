@@ -33,9 +33,9 @@ namespace IntelTask.Infrastructure.Repositorios
                 .Where(u => u.CT_Correo_usuario == correo && u.CT_Contrasenna == contrasena)
                 .Select(u => new Autenticacion
                 {
+                    CN_Id_usuario = u.CN_Id_usuario,
                     CT_Nombre_usuario = u.CT_Nombre_usuario,
                     CT_Correo_usuario = u.CT_Correo_usuario,
-                    CT_Contrasenna = u.CT_Contrasenna,
                     CT_Rol = u.CN_Id_rol
                 })
                 .FirstOrDefaultAsync();
@@ -45,11 +45,11 @@ namespace IntelTask.Infrastructure.Repositorios
 
 
 
-        // Get all users from the database
         public async Task<List<Usuario>>  GetAllUsers()
         {
             return await _context.T_Usuarios.ToListAsync();
         }
+
 
 
         // Get all active users
@@ -61,7 +61,6 @@ namespace IntelTask.Infrastructure.Repositorios
 
 
 
-        // Get a specific user
         public async Task<Usuario?> GetUserById(int id)
         {
             return await _context.T_Usuarios.FindAsync(id);
@@ -69,8 +68,6 @@ namespace IntelTask.Infrastructure.Repositorios
 
 
 
-
-        // add a new user and associate them with an office
         public async Task AddUser(Usuario user)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -94,8 +91,6 @@ namespace IntelTask.Infrastructure.Repositorios
 
 
 
-
-        // Update an existing user and their office association
         public async Task UpdateUser(Usuario user)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -117,7 +112,6 @@ namespace IntelTask.Infrastructure.Repositorios
 
 
 
-        // Change the status of a user
         public async Task ChangeUserStatus(int id)
         {
             var user = await _context.T_Usuarios.FindAsync(id);

@@ -8,6 +8,7 @@ import { TuiDay, TuiTime } from '@taiga-ui/cdk/date-time';
 import { ServicioTarea } from '../../core/services/servicio-tarea';
 import { ServicioUsuario } from '../../core/services/servicio-usuario';
 import { Usuario } from '../../models/usuario';
+import { Auth } from '../../core/AuthService/auth';
 
 @Component({
   standalone: true,
@@ -41,10 +42,12 @@ export class SuperFormTarea implements OnInit {
   ];
   motivoEsperaDeshabilitado: boolean = false;
 
+  constructor(private auth: Auth) { }
 
 
   ngOnInit(): void {
     this.horasValidas = this.generarHorasValidas();
+
     this.userService.getLowUsers().subscribe({
       next: (usuarios) => {
         this.lowUsers = usuarios;
@@ -52,30 +55,21 @@ export class SuperFormTarea implements OnInit {
       error: (err) => console.error('Error al cargar los usuarios', err),
     });
 
-    if (this.modo === 'editar' && this.tarea) {
-      this.motivoEsperaDeshabilitado = this.tarea.estado === 4;
-    }
-
     this.form = new FormGroup({
       gisValue: new FormControl(''),
       tituloValue: new FormControl('', [Validators.required, Validators.minLength(5)]),
       desValue: new FormControl('', [Validators.minLength(10), Validators.maxLength(300)]),
       fechaLimite: new FormControl<TuiDay | null>(null, [Validators.required, this.validarFecha]),
       horaLimite: new FormControl('', [Validators.required, this.validarHora]),
-      motivoEspera: new FormControl('Sin motivo de espera'),
+      motivoEspera: new FormControl(
+        { value: 'Sin motivo de espera', disabled: this.modo === 'crear' }
+      ),
       compleValue: new FormControl('', Validators.required),
       prioValue: new FormControl('', Validators.required),
       asignado: new FormControl(null, Validators.required),
     });
 
 
-    this.userService.getLowUsers().subscribe({
-      next: (usuarios) => this.lowUsers = usuarios,
-      error: (err) => console.error('Error cargando usuarios', err),
-    });
-
-
-    /* & Para actualizar datos */
     if (this.modo === 'editar' && this.tarea) {
       this.form.patchValue({
         gisValue: this.tarea.numGis,
@@ -101,8 +95,17 @@ export class SuperFormTarea implements OnInit {
 
 
   guardarTarea(): void {
+    const tokenData = this.auth.obtenerDatosToken();
+    const idCreador = tokenData?.identificador;
+
+    if (!idCreador || isNaN(idCreador)) {
+      alert('ID de creador inválido desde el token. Inicie sesión nuevamente');
+      return;
+    }
+
     const tareaForm: Tarea = {
       ...this.tarea,
+      idTarea: this.tarea?.idTarea || 0,
       titulo: this.form.get('tituloValue')?.value,
       descripcion: this.form.get('desValue')?.value,
       motivoEspera: this.form.get('motivoEspera')?.value,
@@ -113,23 +116,32 @@ export class SuperFormTarea implements OnInit {
         this.form.get('fechaLimite')?.value,
         this.form.get('horaLimite')?.value
       ),
-
       fechaAsignacion: new Date(),
-      estado: 1,
-      creador: 1,
+      estado: 2,
+      creador: idCreador,
       asignado: this.form.get('asignado')?.value,
-      idTarea: this.tarea?.idTarea || 0,
     };
 
-    const accion = tareaForm.idTarea
+
+    const accion = this.modo === 'editar'
       ? this.tareaService.actualizarTarea(tareaForm)
       : this.tareaService.crearTarea(tareaForm);
 
     accion.subscribe({
-      next: () => this.tareaGuardada.emit(),
-      error: (err) => alert('Error al guardar: ' + err.message),
+      next: () => {
+        console.log("se actualiza");
+        this.tareaGuardada.emit();
+      },
+      error: (err) => {
+        const msg = err?.error?.mensaje || 'Error desconocido';
+        alert('Error al guardar: ' + msg);
+      },
     });
   }
+
+
+
+
 
   private combinarFechaHora(dia: TuiDay | null, hora: string): Date {
     if (!dia || !hora) return new Date();

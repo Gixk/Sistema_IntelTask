@@ -15,18 +15,15 @@
       <form [formGroup]="form">
         <tui-textfield>
           <label tuiLabel>Correo electrónico</label>
-          <input placeholder="usuario@gmail.com" tuiTextfield />
+          <input placeholder="usuario@gmail.com" formControlName="user" tuiTextfield />
         </tui-textfield>
-
 
         <tui-textfield class="alineado">
           <label tuiLabel>Contraseña</label>
-          <input tuiTextfield type="password" placeholder="Ingrese contraseña" />
+          <input type="password" placeholder="Ingrese contraseña" formControlName="password" tuiTextfield />
         </tui-textfield>
 
-        <button tuiButton size="s" appearance="secondary" class="forgot-password">Nueva contraseña</button>
-
-        <button tuiButton type="submit" appearance="primary" class="btn-login" (click)="login2()">
+        <button tuiButton type="submit" appearance="primary" class="btn-login" (click)="login()">
           Ingresar
         </button>
       </form>

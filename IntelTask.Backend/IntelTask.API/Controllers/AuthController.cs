@@ -1,4 +1,5 @@
-﻿using IntelTask.Domain.Entities;
+﻿using IntelTask.API.frontDTO;
+using IntelTask.Domain.Entities;
 using IntelTask.Domain.Services; // Asegúrate de que este espacio de nombres existe y está referenciado correctamente.
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,11 +19,11 @@ namespace IntelTask.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> AuthUser([FromBody] Autenticacion auth)
+        public async Task<IActionResult> AuthUser([FromBody] LoginDTO login)
         {
             try
             {
-                var token = await _authService.AuthenticateUserAsync(auth);
+                var token = await _authService.AuthenticateUserAsync(login.CT_Correo_usuario, login.CT_Contrasenna);
                 return Ok(new { token });
             }
             catch (Exception ex)

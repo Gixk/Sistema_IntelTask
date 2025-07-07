@@ -5,11 +5,13 @@ import { jwtDecode } from 'jwt-decode';
 
 
 interface TokenData {
+  identificador: number;
   usuario: string;
   nombre: string;
   rol: number;
   exp: number;
 }
+
 
 @Injectable({
   providedIn: 'root'

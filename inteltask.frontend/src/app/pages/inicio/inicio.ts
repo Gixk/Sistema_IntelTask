@@ -42,8 +42,7 @@ export class Inicio implements OnInit {
 
   cargarUser(): void {
     this.usuarioService.getUsuario().subscribe((usuario: Usuario) => {
-      console.log(usuario);
-      
+      console.log(usuario);            
       this.usuario = usuario;
       this.userInfo = [
         {

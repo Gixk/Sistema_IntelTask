@@ -13,6 +13,7 @@ namespace IntelTask.Domain.Services
         private readonly Usuario_IRepository _usuarioRepo;
         private readonly Tareas_IRepository _tareaRepo;
         private readonly Rol_IRepository _rolRepo;
+        private Usuario? asignado;  
 
         public Servicios_Tarea(Usuario_IRepository usuarioRepo, Tareas_IRepository tareaRepo, Rol_IRepository uofre)
             {
@@ -22,7 +23,7 @@ namespace IntelTask.Domain.Services
         }
 
 
-        public async Task<Tareas> CrearTarea(Tareas tarea, int idCreador)
+        public async Task<Tareas> CrearTarea(Tareas tarea, int idRol)
         {
             // Validar campos mínimos
             if (string.IsNullOrWhiteSpace(tarea.CT_Titulo_tarea))
@@ -35,24 +36,24 @@ namespace IntelTask.Domain.Services
             if (tarea.CN_Id_estado == 0)
                 tarea.CN_Id_estado = 1; 
 
-            
 
             // Obtener usuarios para validar jerarquía
-            int creador = await _rolRepo.GetJerarquiaRol(idCreador);
+            int creador = await _rolRepo.GetJerarquiaRol(idRol);
 
 
             if (tarea.CN_Usuario_asignado.HasValue)
             {
-                int asignado = await _rolRepo.GetJerarquiaRol(tarea.CN_Usuario_asignado.Value);
+                asignado = await _usuarioRepo.GetUserById(tarea.CN_Usuario_asignado ?? 0);
 
-                if (!PuedeAsignar(creador, asignado))
+                var rol = await _rolRepo.GetJerarquiaRol(asignado.CN_Id_rol);
+
+                if (!PuedeAsignar(creador, rol))
                     throw new Exception("No tiene permisos para asignar tareas a este usuario.");
             }
 
 
             tarea.CF_Fecha_asignacion = DateTime.Now;
-            tarea.CN_Usuario_creador = idCreador;
-            tarea.CN_Id_estado = 1;
+            tarea.CN_Id_estado = 2;
 
             // se guarda en bitacora acciones
 
